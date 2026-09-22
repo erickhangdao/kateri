@@ -1,0 +1,90 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { formatDate, managedImage } from "../lib/content";
+import { registrationOpen } from "../lib/announcements.mjs";
+import Downloads from "./Downloads.astro";
+interface Props {
+  announcement: CollectionEntry<"announcements">;
+}
+const {
+  announcement: { id, data },
+} = Astro.props;
+---
+
+<article class="featured-announcement">
+  <div class="featured-aside">
+    <p class="eyebrow">IN OUR COMMUNITY</p>
+    <span class="featured-word" lang="vi">
+      Cùng
+      <br />
+      đồng hành.
+    </span>
+    <p>Walking together in faith.</p>
+    {data.image && (
+      <Image
+        src={managedImage(data.image)}
+        alt={data.imageAlt}
+        width={500}
+        loading="lazy"
+        format="webp"
+      />
+    )}
+  </div>
+  <div class="featured-body">
+    <div class="meta">
+      <span class="tag">FEATURED ANNOUNCEMENT</span>
+      <time datetime={data.published}>{formatDate(data.published)}</time>
+    </div>
+    <h3>
+      <a href={`/announcements/${id}/`}>{data.title}</a>
+    </h3>
+    {data.titleVi && (
+      <p class="translation" lang="vi">
+        {data.titleVi}
+      </p>
+    )}
+    <p class="lead">{data.summary}</p>
+    {(data.eventStart || data.location || data.registrationDeadline) && (
+      <dl class="event-facts">
+        {data.eventStart && (
+          <div>
+            <dt>When</dt>
+            <dd>
+              {formatDate(data.eventStart)}
+              {data.eventEnd &&
+                data.eventEnd !== data.eventStart &&
+                ` – ${formatDate(data.eventEnd)}`}
+            </dd>
+          </div>
+        )}
+        {data.location && (
+          <div>
+            <dt>Where</dt>
+            <dd>{data.location}</dd>
+          </div>
+        )}
+        {data.registrationDeadline && (
+          <div>
+            <dt>Registration deadline</dt>
+            <dd>{formatDate(data.registrationDeadline)}</dd>
+          </div>
+        )}
+      </dl>
+    )}
+    <div class="actions">
+      {registrationOpen(data) && (
+        <a class="button" href={data.registrationUrl}>
+          Register <span aria-hidden="true">↗</span>
+        </a>
+      )}
+      <a
+        class={registrationOpen(data) ? "text-link" : "button"}
+        href={`/announcements/${id}/`}
+      >
+        Details & documents <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <Downloads data={data} />
+  </div>
+</article>

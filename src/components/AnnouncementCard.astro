@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "../lib/content";
+import { isCurrent } from "../lib/announcements.mjs";
+interface Props {
+  announcement: CollectionEntry<"announcements">;
+}
+const {
+  announcement: { id, data },
+} = Astro.props;
+---
+
+<article class="announcement-card">
+  <div class="meta">
+    <time datetime={data.published}>{formatDate(data.published)}</time>
+    <span>{isCurrent(data) ? "Current" : "Archived"}</span>
+  </div>
+  <h3>
+    <a href={`/announcements/${id}/`}>{data.title}</a>
+  </h3>
+  {data.titleVi && (
+    <p class="translation" lang="vi">
+      {data.titleVi}
+    </p>
+  )}
+  <p>{data.summary}</p>
+  <a class="text-link" href={`/announcements/${id}/`}>
+    Read announcement <span aria-hidden="true">↗</span>
+  </a>
+</article>

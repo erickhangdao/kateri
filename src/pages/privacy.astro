@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { siteSettings } from "../lib/content";
+const settings = await siteSettings();
+---
+
+<BaseLayout
+  title="Privacy & accessibility | Liên Đoàn Kateri"
+  description="Privacy and accessibility information for the Liên Đoàn Kateri website."
+>
+  <div class="container page-header">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> / Privacy & accessibility
+    </nav>
+    <h1>Privacy & accessibility</h1>
+  </div>
+  <div class="container page-content narrow prose">
+    <h2>Your privacy</h2>
+    <p>
+      This website does not use advertising trackers or visitor analytics. Links
+      to Facebook, Google Drive, VEYM Canada, and other services take you to
+      their websites, which have their own privacy practices. Our hosting
+      provider may process technical request logs to operate the website.
+    </p>
+    <p>
+      Email is the contact method for this site. Please send only the
+      information necessary for your enquiry. Completed forms should be
+      submitted through the instructions provided by your chapter or event
+      organiser, not uploaded to this public website.
+    </p>
+    <h2>For website editors</h2>
+    <p>
+      The webmaster interface uses GitHub authentication in production.
+      Authentication cookies are used for the editing session. Uploaded
+      documents and images are public; never upload completed consent forms or
+      private member information.
+    </p>
+    <h2>Accessibility</h2>
+    <p>
+      This site supports keyboard navigation, visible focus indicators,
+      responsive layouts, and reduced-motion preferences. If a document or page
+      is difficult to access, contact us and describe the material you need so
+      we can help.
+    </p>
+    <a class="text-link" href={`mailto:${settings.contactEmail}`}>
+      {settings.contactEmail} ↗
+    </a>
+  </div>
+</BaseLayout>

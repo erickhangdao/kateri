@@ -1,0 +1,100 @@
+---
+import { getImage } from "astro:assets";
+import { managedImage, type Settings } from "../lib/content";
+interface Props {
+  settings: Settings;
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>;
+}
+const {
+  settings,
+  title = settings.seoTitle,
+  description = settings.seoDescription,
+  image = settings.ogImage,
+  imageAlt = settings.heroAlt,
+  noindex = false,
+  schema,
+} = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site!);
+const socialImage = await getImage({
+  src: managedImage(image),
+  width: 1400,
+  format: "jpg",
+});
+const graph = [
+  {
+    "@type": "Organization",
+    "@id": `${Astro.site}#organization`,
+    name: settings.name,
+    alternateName: settings.englishName,
+    url: Astro.site,
+    email: settings.contactEmail,
+    areaServed: { "@type": "AdministrativeArea", name: "Ontario, Canada" },
+    parentOrganization: {
+      "@type": "Organization",
+      name: "Vietnamese Eucharistic Youth Movement in Canada",
+      url: settings.veymUrl,
+    },
+    sameAs: [settings.facebook, settings.instagram].filter(Boolean),
+  },
+  {
+    "@type": "WebSite",
+    "@id": `${Astro.site}#website`,
+    name: settings.englishName,
+    url: Astro.site,
+    inLanguage: ["en-CA", "vi"],
+    publisher: { "@id": `${Astro.site}#organization` },
+  },
+  ...(Astro.url.pathname !== "/"
+    ? [
+        {
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            {
+              "@type": "ListItem",
+              position: 1,
+              name: "Home",
+              item: Astro.site,
+            },
+            {
+              "@type": "ListItem",
+              position: 2,
+              name: title,
+              item: canonical.href,
+            },
+          ],
+        },
+      ]
+    : []),
+  ...(schema ? [schema] : []),
+];
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta name="robots" content={noindex ? "noindex, nofollow" : "index, follow"} />
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:site_name" content={settings.englishName} />
+<meta property="og:locale" content="en_CA" />
+<meta property="og:image" content={new URL(socialImage.src, Astro.site!)} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={new URL(socialImage.src, Astro.site!)} />
+<meta name="twitter:image:alt" content={imageAlt} />
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@graph": graph,
+  }).replace(/</g, "\\u003c")}
+></script>

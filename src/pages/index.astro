@@ -1,0 +1,123 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import About from "../components/About.astro";
+import FeaturedAnnouncement from "../components/FeaturedAnnouncement.astro";
+import AnnouncementCard from "../components/AnnouncementCard.astro";
+import Chapters from "../components/Chapters.astro";
+import Leadership from "../components/Leadership.astro";
+import ResourceRow from "../components/ResourceRow.astro";
+import { siteSettings, byOrder } from "../lib/content";
+import { isCurrent, announcementOrder } from "../lib/announcements.mjs";
+const [settings, announcements, chapters, leaders, resources] =
+  await Promise.all([
+    siteSettings(),
+    getCollection("announcements"),
+    getCollection("chapters"),
+    getCollection("leadership"),
+    getCollection("resources"),
+  ]);
+const current = announcements
+  .filter((item) => isCurrent(item.data))
+  .sort(announcementOrder);
+---
+
+<BaseLayout>
+  <Hero settings={settings} />
+  <About settings={settings} />
+  <section
+    id="announcements"
+    class="section announcements-section"
+    aria-labelledby="announcements-title"
+  >
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">LIFE IN OUR LIÊN ĐOÀN</p>
+          <h2 id="announcements-title">News & gatherings</h2>
+        </div>
+        <a class="text-link" href="/announcements/">
+          All announcements <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      {current[0] ? (
+        <FeaturedAnnouncement announcement={current[0]} />
+      ) : (
+        <div class="empty-state">
+          <h3>A new chapter is always beginning.</h3>
+          <p>
+            There are no current announcements. Connect with your local chapter
+            for upcoming activities.
+          </p>
+          <a href="/announcements/" class="text-link">
+            Browse past announcements ↗
+          </a>
+        </div>
+      )}
+      {current.length > 1 && (
+        <div class="announcement-grid">
+          {current.slice(1, 4).map((announcement) => (
+            <AnnouncementCard announcement={announcement} />
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+  <Chapters chapters={chapters.sort(byOrder)} />
+  <Leadership leaders={leaders.sort(byOrder)} settings={settings} />
+  <section
+    id="resources"
+    class="section resources-section"
+    aria-labelledby="resources-title"
+  >
+    <div class="container resources-grid">
+      <div>
+        <p class="eyebrow" lang="vi">
+          TÀI LIỆU & BIỂU MẪU
+        </p>
+        <h2 id="resources-title">
+          Prepared
+          <br />
+          to serve.
+        </h2>
+        <p>
+          Forms, formation materials, and guidance for our chapters and youth
+          leaders.
+        </p>
+        <a class="text-link" href="/resources/">
+          View all resources <span aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <div>
+        {resources
+          .filter((item) => item.data.featured)
+          .sort(byOrder)
+          .slice(0, 4)
+          .map((resource) => (
+            <ResourceRow resource={resource} />
+          ))}
+      </div>
+    </div>
+  </section>
+  <section
+    id="contact"
+    class="section container contact-section"
+    aria-labelledby="contact-title"
+  >
+    <p class="eyebrow">LET’S WALK TOGETHER</p>
+    <h2 id="contact-title">There’s a place for you here.</h2>
+    <p class="lead">{settings.contactText}</p>
+    <a class="contact-email" href={`mailto:${settings.contactEmail}`}>
+      {settings.contactEmail} <span aria-hidden="true">↗</span>
+    </a>
+    <div class="contact-links">
+      <span>{settings.region}</span>
+      {settings.facebook && (
+        <a href={settings.facebook}>Follow on Facebook ↗</a>
+      )}
+      {settings.instagram && <a href={settings.instagram}>Instagram ↗</a>}
+      <a href={settings.veymUrl}>VEYM Canada ↗</a>
+    </div>
+  </section>
+</BaseLayout>

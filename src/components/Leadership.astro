@@ -1,0 +1,59 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { managedImage, type Settings } from "../lib/content";
+interface Props {
+  leaders: CollectionEntry<"leadership">[];
+  settings: Settings;
+}
+const { leaders, settings } = Astro.props;
+---
+
+<section
+  id="leadership"
+  class="section container"
+  aria-labelledby="leadership-title"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">
+        A SPIRIT OF SERVICE <span>/ {settings.leadershipTerm}</span>
+      </p>
+      <h2 id="leadership-title" lang="vi">
+        Ban Thường Vụ
+      </h2>
+      <p class="lead">{settings.leadershipIntro}</p>
+    </div>
+    <span class="section-note">Liên Đoàn leadership</span>
+  </div>
+  <div class="leader-grid">
+    {leaders.map(({ data }) => (
+      <article class="leader">
+        {data.image && (
+          <Image
+            class="leader-photo"
+            src={managedImage(data.image)}
+            alt={data.imageAlt || data.name}
+            width={240}
+            height={240}
+            loading="lazy"
+            format="webp"
+          />
+        )}
+        <p class="leader-role" lang="vi">
+          {data.roleVi || data.role}
+        </p>
+        <p class="leader-role-en">{data.role}</p>
+        <h3 lang="vi">
+          <span>{data.prefix}</span> {data.name}
+        </h3>
+        {data.biography && <p>{data.biography}</p>}
+        {data.email && (
+          <a class="text-link" href={`mailto:${data.email}`}>
+            Email {data.name.split(" ").at(-1)} ↗
+          </a>
+        )}
+      </article>
+    ))}
+  </div>
+</section>

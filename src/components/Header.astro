@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import { managedImage, type Settings } from "../lib/content";
+interface Props {
+  settings: Settings;
+}
+const { settings } = Astro.props;
+const links = [
+  ["About", "about"],
+  ["Announcements", "announcements"],
+  ["Chapters", "chapters"],
+  ["Leadership", "leadership"],
+  ["Resources", "resources"],
+  ["Contact", "contact"],
+];
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">
+      <Image
+        src={managedImage(settings.logo)}
+        alt=""
+        width={48}
+        height={48}
+        format="webp"
+      />
+      <span>
+        <span class="brand-overline" lang="vi">
+          LIÊN ĐOÀN
+        </span>
+        <strong>{settings.shortName}</strong>
+      </span>
+    </a>
+    <nav class="desktop-nav" aria-label="Main navigation">
+      {links.map(([label, id]) => (
+        <a href={`/#${id}`}>{label}</a>
+      ))}
+    </nav>
+    <details class="mobile-menu">
+      <summary>
+        Menu <span aria-hidden="true">☰</span>
+      </summary>
+      <nav aria-label="Mobile navigation">
+        {links.map(([label, id]) => (
+          <a href={`/#${id}`}>{label}</a>
+        ))}
+      </nav>
+    </details>
+  </div>
+</header>
+<script>
+  const menu = document.querySelector<HTMLDetailsElement>(".mobile-menu");
+  menu?.querySelectorAll("a").forEach((link) =>
+    link.addEventListener("click", () => {
+      menu.open = false;
+    }),
+  );
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu?.open) {
+      menu.open = false;
+      menu.querySelector("summary")?.focus();
+    }
+  });
+</script>

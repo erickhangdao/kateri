@@ -1,0 +1,151 @@
+---
+import { getEntry } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Downloads from "../../components/Downloads.astro";
+import { formatDate, paragraphs, managedImage } from "../../lib/content";
+import {
+  isCurrent,
+  isPublished,
+  registrationOpen,
+} from "../../lib/announcements.mjs";
+const entry = await getEntry("announcements", Astro.params.slug || "");
+if (!entry || !isPublished(entry.data)) return Astro.rewrite("/404/");
+const { data } = entry;
+const current = isCurrent(data);
+const schema =
+  data.eventStart && data.location
+    ? {
+        "@type": "Event",
+        name: data.title,
+        description: data.summary,
+        startDate: data.eventStart,
+        endDate: data.eventEnd || data.eventStart,
+        eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+        location: {
+          "@type": "Place",
+          name: data.location,
+          address: data.location,
+        },
+        organizer: { "@id": "https://kateri.veym.ca/#organization" },
+        url: new URL(Astro.url.pathname, Astro.site!).href,
+      }
+    : undefined;
+---
+
+<BaseLayout
+  title={`${data.title} | Liên Đoàn Kateri`}
+  description={data.summary}
+  image={data.image || undefined}
+  imageAlt={data.imageAlt || undefined}
+  schema={schema}
+>
+  <div class="container page-header">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> / <a href="/announcements/">Announcements</a> /{" "}
+      <span>{data.title}</span>
+    </nav>
+    <p class="eyebrow">
+      {current ? "CURRENT ANNOUNCEMENT" : "FROM THE ARCHIVE"}
+    </p>
+    <h1>{data.title}</h1>
+    {data.titleVi && (
+      <p class="lead" lang="vi">
+        {data.titleVi}
+      </p>
+    )}
+    <p class="meta">
+      Published{" "}
+      <time datetime={data.published}>{formatDate(data.published)}</time>
+    </p>
+  </div>
+  <div class="container article-layout">
+    <article class="prose">
+      {!current && (
+        <p class="archive-notice">
+          This announcement is archived. Event dates and instructions are
+          retained for reference.
+        </p>
+      )}
+      {data.image && (
+        <Image
+          src={managedImage(data.image)}
+          alt={data.imageAlt}
+          width={800}
+          format="webp"
+          loading="eager"
+        />
+      )}
+      {paragraphs(data.description).map((paragraph) => (
+        <p>{paragraph}</p>
+      ))}
+      {data.descriptionVi && (
+        <section lang="vi">
+          <h2>Tiếng Việt</h2>
+          {paragraphs(data.descriptionVi).map((paragraph) => (
+            <p>{paragraph}</p>
+          ))}
+        </section>
+      )}
+      <div class="actions">
+        {registrationOpen(data) && (
+          <a class="button" href={data.registrationUrl}>
+            Register ↗
+          </a>
+        )}
+        {data.secondaryUrl && (
+          <a class="text-link" href={data.secondaryUrl}>
+            {data.secondaryLabel || "Additional information"} ↗
+          </a>
+        )}
+      </div>
+      {data.registrationUrl && !registrationOpen(data) && (
+        <p class="archive-notice">Registration is closed.</p>
+      )}
+      {(data.attachments.length > 0 ||
+        data.englishPdf ||
+        data.vietnamesePdf) && (
+        <section aria-labelledby="downloads-title">
+          <h2 id="downloads-title">Documents & forms</h2>
+          <Downloads data={data} />
+        </section>
+      )}
+    </article>
+    <aside class="article-aside">
+      <h2 class="eyebrow">AT A GLANCE</h2>
+      <dl class="event-facts">
+        {data.eventStart && (
+          <div>
+            <dt>Starts</dt>
+            <dd>{formatDate(data.eventStart)}</dd>
+          </div>
+        )}
+        {data.eventEnd && (
+          <div>
+            <dt>Ends</dt>
+            <dd>{formatDate(data.eventEnd)}</dd>
+          </div>
+        )}
+        {data.location && (
+          <div>
+            <dt>Location</dt>
+            <dd>{data.location}</dd>
+          </div>
+        )}
+        {data.registrationDeadline && (
+          <div>
+            <dt>Registration deadline</dt>
+            <dd>{formatDate(data.registrationDeadline)}</dd>
+          </div>
+        )}
+        <div>
+          <dt>Status</dt>
+          <dd>{current ? "Current" : "Archived"}</dd>
+        </div>
+      </dl>
+      <a class="text-link" href="/announcements/">
+        All announcements ↗
+      </a>
+    </aside>
+  </div>
+</BaseLayout>

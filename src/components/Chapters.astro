@@ -1,0 +1,135 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { managedImage } from "../lib/content";
+import ChapterMap from "./ChapterMap.astro";
+interface Props {
+  chapters: CollectionEntry<"chapters">[];
+}
+const { chapters } = Astro.props;
+---
+
+<section
+  id="chapters"
+  class="section chapters-section"
+  aria-labelledby="chapters-title"
+>
+  <div class="container">
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">ROOTED IN OUR COMMUNITIES</p>
+        <h2 id="chapters-title">
+          Our chapters <span lang="vi">/ Các Đoàn</span>
+        </h2>
+      </div>
+      <p>
+        Find your community.
+        <br />
+        Grow in faith together.
+      </p>
+    </div>
+    <div class="chapter-view-toolbar" hidden>
+      <p>One community, across Ontario.</p>
+      <div class="chapter-view-switch" role="group" aria-label="Chapter view">
+        <button
+          type="button"
+          data-chapter-view="map"
+          aria-pressed="true"
+          aria-controls="chapter-map"
+        >
+          Map view
+        </button>
+        <button
+          type="button"
+          data-chapter-view="list"
+          aria-pressed="false"
+          aria-controls="chapter-list"
+        >
+          List view
+        </button>
+      </div>
+    </div>
+    <ChapterMap chapters={chapters} />
+    <div class="chapter-grid" id="chapter-list">
+      {chapters.map(({ id, data }, index) => (
+        <article class="chapter" id={`chapter-${id}`}>
+          <div class="chapter-top">
+            <span class="chapter-number" aria-hidden="true">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <span class="eyebrow">{data.city}</span>
+            {data.image && (
+              <Image
+                src={managedImage(data.image)}
+                alt={data.imageAlt}
+                width={52}
+                height={52}
+                loading="lazy"
+              />
+            )}
+          </div>
+          <h3 lang="vi">{data.name}</h3>
+          {data.parish && <p>{data.parish}</p>}
+          {(data.website || data.social) && (
+            <a
+              class="text-link"
+              href={data.website || data.social}
+              aria-label={`Connect with ${data.name}, ${data.city}`}
+            >
+              Connect with this chapter <span aria-hidden="true">↗</span>
+            </a>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .chapter-view-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+  .chapter-view-toolbar > p {
+    font-size: 0.96rem;
+    color: var(--muted);
+  }
+  .chapter-view-switch {
+    display: flex;
+    padding: 4px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 4px;
+  }
+  .chapter-view-switch button {
+    border: 0;
+    border-radius: 2px;
+    background: transparent;
+    padding: 9px 21px;
+    min-height: 44px;
+    cursor: pointer;
+    color: var(--primary);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .chapter-view-switch button[aria-pressed="true"] {
+    background: var(--primary);
+    color: white;
+  }
+  @media (max-width: 600px) {
+    .chapter-view-toolbar {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .chapter-view-switch {
+      width: 100%;
+    }
+    .chapter-view-switch button {
+      flex: 1;
+    }
+  }
+</style>

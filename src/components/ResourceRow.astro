@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { fileType, formatDate } from "../lib/content";
+interface Props {
+  resource: CollectionEntry<"resources">;
+}
+const {
+  resource: { id, data },
+} = Astro.props;
+---
+
+<article class="resource-row" id={id} data-category={data.category}>
+  <span class="document-icon" aria-hidden="true">
+    {data.file ? fileType(data.file) : "LINK"}
+  </span>
+  <div>
+    <p class="resource-meta">
+      {data.category} <span aria-hidden="true">·</span> {data.language}
+    </p>
+    <h3>
+      <a href={data.file || data.externalUrl}>{data.title}</a>
+    </h3>
+    {data.titleVi && (
+      <p lang="vi" class="translation">
+        {data.titleVi}
+      </p>
+    )}
+    <p>{data.description}</p>
+    <span class="resource-date">
+      Published / updated{" "}
+      <time datetime={data.updated}>{formatDate(data.updated)}</time>
+    </span>
+  </div>
+  <a
+    class="resource-action"
+    href={data.file || data.externalUrl}
+    download={data.file ? true : undefined}
+    aria-label={`${data.file ? "Download" : "Open"} ${data.title}`}
+  >
+    <span aria-hidden="true">{data.file ? "↓" : "↗"}</span>
+  </a>
+</article>

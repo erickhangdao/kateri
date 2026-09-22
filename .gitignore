@@ -1,0 +1,29 @@
+# Recreated by npm and Astro
+node_modules/
+dist/
+.astro/
+
+# Local credentials; the blank example is intentionally committed
+.env
+.env.*
+!.env.example
+.npmrc
+*.pem
+*.key
+
+# Temporary investigation, reports and local tooling
+research/
+test-results/
+coverage/
+.cache/
+*.log
+*.tsbuildinfo
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo

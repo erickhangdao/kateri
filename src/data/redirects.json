@@ -1,0 +1,23 @@
+{
+  "/about/": "/#about",
+  "/contact/": "/#contact",
+  "/news/": "/announcements/",
+  "/archive/": "/announcements/",
+  "/documents-and-forms/": "/resources/",
+  "/privacy-policy/": "/privacy/",
+  "/blog/ban-chap-hanh-lien-doan-2026-2029/": "/#leadership",
+  "/blog/2026/09/01/ban-chap-hanh-lien-doan-2026-2029/": "/#leadership",
+  "/blog/doan-ane-thanh/": "/#chapter-ane-thanh",
+  "/blog/doan-anre-dung-lac/": "/#chapter-anre-dung-lac",
+  "/blog/doan-anre-phu-yen/": "/#chapter-anre-phu-yen",
+  "/blog/doan-emmanuel/": "/#chapter-emmanuel",
+  "/blog/doan-phanxico-xavie-can/": "/#chapter-phanxico-xavie-can",
+  "/blog/doan-teresa-hai-dong/": "/#chapter-teresa-hai-dong",
+  "/blog/doan-toma-thien/": "/#chapter-toma-thien",
+  "/blog/don-xin-tuyen-hua-va-thang-cap/": "/resources/#promotion-application",
+  "/blog/nghi-thuc-tuyen-hua-va-trao-khan-hiep-si-truong-thanh/": "/resources/#hstt-promise",
+  "/blog/volunteer-guidelines-code-of-conduct/": "/resources/#toronto-screening",
+  "/blog/diocese-of-hamilton/": "/resources/#hamilton-safeguarding",
+  "/blog/diocese-of-london-safe-environment-policy/": "/resources/#london-safe-environment",
+  "/wp-content/uploads/2025/09/NGHI-THUC-TUYEN-HUA-HSTT-GENERAL.docx": "/uploads/documents/hstt-promise-ceremony.docx"
+}

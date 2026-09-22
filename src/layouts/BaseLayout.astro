@@ -1,0 +1,38 @@
+---
+import SEO from "../components/SEO.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { siteSettings } from "../lib/content";
+import "../styles/global.css";
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  schema?: Record<string, unknown>;
+}
+const settings = await siteSettings();
+---
+
+<!doctype html>
+<html lang="en-CA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#004225" />
+    <link rel="icon" href="/icons/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <SEO settings={settings} {...Astro.props} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      Skip to content
+    </a>
+    <Header settings={settings} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer settings={settings} />
+  </body>
+</html>

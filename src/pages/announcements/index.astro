@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import AnnouncementCard from "../../components/AnnouncementCard.astro";
+import {
+  isCurrent,
+  isPublished,
+  announcementOrder,
+} from "../../lib/announcements.mjs";
+const all = (await getCollection("announcements")).filter((item) =>
+  isPublished(item.data),
+);
+const current = all
+  .filter((item) => isCurrent(item.data))
+  .sort(announcementOrder);
+const archived = all
+  .filter((item) => !isCurrent(item.data))
+  .sort((a, b) => b.data.published.localeCompare(a.data.published));
+---
+
+<BaseLayout
+  title="Announcements & archive | Liên Đoàn Kateri"
+  description="Current notices, formation opportunities, events, and past announcements from Liên Đoàn Kateri Tekakwitha in Ontario."
+>
+  <div class="container page-header">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> / Announcements
+    </nav>
+    <p class="eyebrow" lang="vi">
+      THÔNG BÁO
+    </p>
+    <h1>Life in our Liên Đoàn</h1>
+    <p class="lead">
+      Stay connected with our chapters, formation opportunities, and shared life
+      of faith.
+    </p>
+  </div>
+  <div class="container page-content">
+    <h2>Current announcements</h2>
+    {current.length ? (
+      <div class="announcement-grid">
+        {current.map((announcement) => (
+          <AnnouncementCard announcement={announcement} />
+        ))}
+      </div>
+    ) : (
+      <p>
+        No current announcements. Please check with your chapter for local
+        activities.
+      </p>
+    )}
+    <h2>Past announcements</h2>
+    {archived.length ? (
+      <div class="announcement-grid">
+        {archived.map((announcement) => (
+          <AnnouncementCard announcement={announcement} />
+        ))}
+      </div>
+    ) : (
+      <p>Past notices will be kept here for reference.</p>
+    )}
+  </div>
+</BaseLayout>

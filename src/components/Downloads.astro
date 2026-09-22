@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { fileType } from "../lib/content";
+interface Props {
+  data: CollectionEntry<"announcements">["data"];
+}
+const { data } = Astro.props;
+const downloads = [
+  ...data.attachments,
+  ...(data.englishPdf
+    ? [{ label: "Announcement — English", file: data.englishPdf }]
+    : []),
+  ...(data.vietnamesePdf
+    ? [{ label: "Thông báo — Tiếng Việt", file: data.vietnamesePdf }]
+    : []),
+];
+---
+
+{downloads.length > 0 && (
+  <ul class="download-list">
+    {downloads.map((item) => (
+      <li>
+        <a href={item.file} download>
+          <span>{item.label}</span>
+          <span class="file-label">{fileType(item.file)} ↓</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

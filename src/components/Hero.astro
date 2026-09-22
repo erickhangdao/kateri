@@ -1,0 +1,55 @@
+---
+import { Image } from "astro:assets";
+import { managedImage, type Settings } from "../lib/content";
+interface Props {
+  settings: Settings;
+}
+const { settings } = Astro.props;
+---
+
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-intro">
+    <p class="eyebrow">
+      VEYM CANADA <span aria-hidden="true">/</span> ONTARIO
+    </p>
+    <h1 id="hero-title">
+      <span lang="vi">Liên Đoàn</span>
+      <br />
+      {settings.shortName}
+    </h1>
+    <p class="hero-english">{settings.englishName}</p>
+    <p class="hero-description">{settings.introduction}</p>
+    <div class="actions">
+      <a class="button" href="#chapters">
+        Discover our chapters <span aria-hidden="true">↗</span>
+      </a>
+      <a class="text-link" href="#announcements">
+        Latest announcements <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+  </div>
+  <figure class="hero-photo container-wide">
+    <Image
+      src={managedImage(settings.heroImage)}
+      alt={settings.heroAlt}
+      widths={[480, 768, 1024, 1400]}
+      sizes="(max-width: 1400px) 100vw, 1400px"
+      width={1400}
+      format="webp"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <figcaption>{settings.heroCaption}</figcaption>
+  </figure>
+  <div class="motto-strip">
+    <div class="container">
+      <span class="motto-latin" lang="la">
+        {settings.motto}
+      </span>
+      <span class="motto-cross" aria-hidden="true">
+        ✦
+      </span>
+      <span>{settings.mottoTranslation}</span>
+    </div>
+  </div>
+</section>

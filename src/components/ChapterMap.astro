@@ -1,0 +1,614 @@
+---
+import type { CollectionEntry } from "astro:content";
+import geography from "../data/ontario-map.json";
+interface Props {
+  chapters: CollectionEntry<"chapters">[];
+}
+const { chapters } = Astro.props;
+// Callout positions separate nearby GTA markers; lines retain their geographic locations.
+const callouts: Record<string, [number, number]> = {
+  "ane-thanh": [130, 485],
+  "anre-dung-lac": [505, 145],
+  "anre-phu-yen": [365, 235],
+  emmanuel: [610, 65],
+  "phanxico-xavie-can": [530, 355],
+  "teresa-hai-dong": [715, 145],
+  "toma-thien": [700, 310],
+};
+const [west, south, east, north] = geography.bounds;
+const mapped = chapters.flatMap((chapter, index) => {
+  const { latitude, longitude } = chapter.data;
+  if (
+    latitude == null ||
+    longitude == null ||
+    longitude < west ||
+    longitude > east ||
+    latitude < south ||
+    latitude > north
+  )
+    return [];
+  const point: [number, number] = [
+    ((longitude - west) / (east - west)) * 800,
+    ((north - latitude) / (north - south)) * 600,
+  ];
+  return [
+    {
+      ...chapter,
+      number: index + 1,
+      point,
+      label: callouts[chapter.id] || point,
+    },
+  ];
+});
+---
+
+<div id="chapter-map" hidden>
+  <div class="map-layout">
+    <div class="map-geography">
+      <div
+        class="map-canvas"
+        role="group"
+        aria-label="Interactive map of chapter communities in southern Ontario"
+        aria-describedby="map-instructions"
+      >
+        <svg
+          class="map-base"
+          viewBox="0 0 800 600"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d={geography.neighbours} class="neighbour-land" />
+          <path d={geography.ontario} class="ontario-land" />
+          <text x="377" y="65" class="province-label">
+            ONTARIO
+          </text>
+          <text x="255" y="220" class="water-label">
+            Lake Huron
+          </text>
+          <text x="372" y="505" class="water-label">
+            Lake Erie
+          </text>
+          <text x="705" y="225" class="water-label">
+            Lake Ontario
+          </text>
+          <text x="106" y="369" class="neighbour-label">
+            MICHIGAN
+          </text>
+          <text x="696" y="459" class="neighbour-label">
+            NEW YORK
+          </text>
+          {mapped.map(({ id, point, label }, index) => (
+            <g
+              class:list={["map-location", { "is-active": index === 0 }]}
+              data-map-location={id}
+            >
+              <line x1={point[0]} y1={point[1]} x2={label[0]} y2={label[1]} />
+              <circle cx={point[0]} cy={point[1]} r="5" />
+            </g>
+          ))}
+        </svg>
+        <div class="ontario-overview" aria-hidden="true">
+          <svg viewBox="0 0 150 164">
+            <path d={geography.overview} />
+            <rect x="82" y="130" width="40" height="32" rx="2" />
+          </svg>
+          <span>Southern Ontario</span>
+        </div>
+        <div class="map-north" aria-hidden="true">
+          <span>↑</span>N
+        </div>
+        {mapped.map(({ id, data, number, label }, index) => (
+          <button
+            type="button"
+            class="map-pin"
+            data-chapter-pin={id}
+            style={`left:${label[0] / 8}%;top:${label[1] / 6}%`}
+            aria-label={`${String(number).padStart(2, "0")} ${data.city}: ${data.name}`}
+            aria-pressed={index === 0 ? "true" : "false"}
+            aria-controls="map-chapter-details"
+          >
+            <span class="pin-number" aria-hidden="true">
+              {String(number).padStart(2, "0")}
+            </span>
+            <span class="pin-city" aria-hidden="true">
+              {data.city}
+            </span>
+          </button>
+        ))}
+      </div>
+      <p class="map-caption">
+        Approximate community locations ·{" "}
+        <a href={geography.sourceUrl}>Map: Natural Earth</a>
+      </p>
+    </div>
+    <div class="map-sidebar">
+      <p class="map-eyebrow">FIND YOUR COMMUNITY</p>
+      <p id="map-instructions">
+        Hover, tap, or focus a marker to meet a chapter.
+      </p>
+      <div id="map-chapter-details" aria-live="polite" aria-atomic="true">
+        {mapped.map(({ id, data, number }, index) => (
+          <article
+            class="map-chapter-detail"
+            data-chapter-detail={id}
+            hidden={index !== 0}
+          >
+            <div class="map-detail-number" aria-hidden="true">
+              {String(number).padStart(2, "0")}
+            </div>
+            <p class="map-city">
+              {data.city} <span>· {data.province}</span>
+            </p>
+            <h3 lang="vi">{data.name}</h3>
+            {data.parish && <p class="map-parish">{data.parish}</p>}
+            {(data.website || data.social) && (
+              <a class="text-link" href={data.website || data.social}>
+                Connect with this chapter <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
+      <div class="map-pagination">
+        <span>
+          <span data-map-count>1</span> of {mapped.length} communities
+        </span>
+        <div>
+          <button
+            type="button"
+            data-map-step="-1"
+            aria-label="Previous chapter"
+          >
+            ←
+          </button>
+          <button type="button" data-map-step="1" aria-label="Next chapter">
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {mapped.length < chapters.length && (
+    <p class="unmapped-note">Additional chapters are available in List view.</p>
+  )}
+</div>
+
+<script>
+  const section = document.querySelector<HTMLElement>("#chapters");
+  if (section) {
+    const map = section.querySelector<HTMLElement>("#chapter-map")!;
+    const list = section.querySelector<HTMLElement>("#chapter-list")!;
+    const toolbar = section.querySelector<HTMLElement>(
+      ".chapter-view-toolbar",
+    )!;
+    const switches = [
+      ...section.querySelectorAll<HTMLButtonElement>("[data-chapter-view]"),
+    ];
+    const pins = [
+      ...section.querySelectorAll<HTMLButtonElement>("[data-chapter-pin]"),
+    ];
+    const details = [
+      ...section.querySelectorAll<HTMLElement>("[data-chapter-detail]"),
+    ];
+    const locations = [
+      ...section.querySelectorAll<SVGGElement>("[data-map-location]"),
+    ];
+    let selected = 0;
+    const showView = (view: string) => {
+      map.hidden = view !== "map";
+      list.hidden = view !== "list";
+      switches.forEach((button) =>
+        button.setAttribute(
+          "aria-pressed",
+          String(button.dataset.chapterView === view),
+        ),
+      );
+    };
+    const selectChapter = (index: number) => {
+      selected = (index + pins.length) % pins.length;
+      const id = pins[selected].dataset.chapterPin;
+      pins.forEach((pin, i) =>
+        pin.setAttribute("aria-pressed", String(i === selected)),
+      );
+      details.forEach((detail) => {
+        detail.hidden = detail.dataset.chapterDetail !== id;
+      });
+      locations.forEach((location) =>
+        location.classList.toggle(
+          "is-active",
+          location.dataset.mapLocation === id,
+        ),
+      );
+      section.querySelector<HTMLElement>("[data-map-count]")!.textContent =
+        String(selected + 1);
+    };
+    const showLinkedChapter = () => {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (
+        id.startsWith("chapter-") &&
+        list.querySelector(`[id="${CSS.escape(id)}"]`)
+      ) {
+        showView("list");
+        document.getElementById(id)?.scrollIntoView({ block: "start" });
+        return true;
+      }
+      return false;
+    };
+    if (pins.length) {
+      toolbar.hidden = false;
+      showView("map");
+      showLinkedChapter();
+      window.addEventListener("hashchange", showLinkedChapter);
+      switches.forEach((button) =>
+        button.addEventListener("click", () =>
+          showView(button.dataset.chapterView!),
+        ),
+      );
+      pins.forEach((pin, index) => {
+        pin.addEventListener("pointerenter", (event) => {
+          if (event.pointerType !== "touch") selectChapter(index);
+        });
+        pin.addEventListener("focus", () => selectChapter(index));
+        pin.addEventListener("click", () => selectChapter(index));
+        pin.addEventListener("keydown", (event) => {
+          if (
+            ![
+              "ArrowRight",
+              "ArrowDown",
+              "ArrowLeft",
+              "ArrowUp",
+              "Home",
+              "End",
+            ].includes(event.key)
+          )
+            return;
+          event.preventDefault();
+          const next =
+            event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? pins.length - 1
+                : selected +
+                  (["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : -1);
+          selectChapter(next);
+          pins[selected].focus();
+        });
+      });
+      section
+        .querySelectorAll<HTMLButtonElement>("[data-map-step]")
+        .forEach((button) =>
+          button.addEventListener("click", () =>
+            selectChapter(selected + Number(button.dataset.mapStep)),
+          ),
+        );
+    }
+  }
+</script>
+
+<!-- Keep below-the-fold map styles local without another render-blocking request. -->
+<style is:inline>
+  .map-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    border: 1px solid var(--border);
+  }
+  .map-geography {
+    background: #e7efec;
+    min-width: 0;
+    container-type: inline-size;
+  }
+  .map-canvas {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+  .map-base {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .ontario-land {
+    fill: #f4f4e9;
+    stroke: #a7b8a8;
+    stroke-width: 1.2;
+  }
+  .neighbour-land {
+    fill: #dde4db;
+    stroke: #b7c5b9;
+    stroke-width: 1;
+  }
+  .province-label {
+    fill: #4f6757;
+    font-size: 17px;
+    letter-spacing: 7px;
+    text-anchor: middle;
+  }
+  .water-label {
+    fill: #526e68;
+    font-family: var(--heading-font);
+    font-size: 17px;
+    font-style: italic;
+    text-anchor: middle;
+  }
+  .neighbour-label {
+    fill: #617061;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-anchor: middle;
+  }
+  .map-location line {
+    stroke: #678877;
+    stroke-width: 1.4;
+    stroke-dasharray: 3 3;
+  }
+  .map-location circle {
+    fill: #52745f;
+    stroke: #fffefa;
+    stroke-width: 2;
+  }
+  .map-location.is-active line {
+    stroke: var(--primary);
+    stroke-width: 2;
+    stroke-dasharray: none;
+  }
+  .map-location.is-active circle {
+    fill: var(--primary);
+    r: 7px;
+  }
+  .ontario-overview {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 108px;
+    padding: 10px;
+    background: #fffefae6;
+    border: 1px solid #c5d1c8;
+  }
+  .ontario-overview svg {
+    width: 100%;
+    display: block;
+    height: 98px;
+  }
+  .ontario-overview path {
+    fill: #d3dfd0;
+    stroke: #6b856c;
+    stroke-width: 1.3;
+  }
+  .ontario-overview rect {
+    fill: #00422526;
+    stroke: var(--primary);
+    stroke-width: 2;
+  }
+  .ontario-overview span {
+    display: block;
+    text-align: center;
+    font-size: 9px;
+    color: var(--primary);
+    margin-top: 5px;
+  }
+  .map-north {
+    position: absolute;
+    right: 19px;
+    top: 18px;
+    color: var(--primary);
+    font-size: 10px;
+    display: grid;
+    justify-items: center;
+    line-height: 1.1;
+  }
+  .map-north span {
+    font-size: 24px;
+  }
+  .map-pin {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    border: 0;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    background: #fffefa;
+    color: var(--primary);
+    cursor: pointer;
+    box-shadow:
+      0 0 0 1px #789982,
+      0 3px 8px #163c3014;
+    transition:
+      background 0.16s,
+      box-shadow 0.16s;
+  }
+  .pin-number {
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 44px;
+  }
+  .pin-city {
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.3;
+    font-weight: 600;
+    background: #fffefae8;
+    border-radius: 2px;
+    padding: 3px 5px;
+    color: #143d2b;
+    pointer-events: none;
+  }
+  .map-pin[aria-pressed="true"],
+  .map-pin:hover {
+    background: var(--primary);
+    color: white;
+    box-shadow:
+      0 0 0 6px #0042251a,
+      0 0 0 1px var(--primary);
+    z-index: 2;
+  }
+  .map-pin[aria-pressed="true"] .pin-city {
+    background: var(--primary);
+    color: white;
+  }
+  .map-pin:focus-visible {
+    outline-offset: 7px;
+  }
+  .map-caption {
+    font-size: 0.7rem;
+    color: #465e51;
+    margin: 0;
+    padding: 11px 18px;
+    border-top: 1px solid #cbd9d0;
+  }
+  .map-sidebar {
+    background: var(--primary);
+    color: white;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+  }
+  .map-eyebrow {
+    font-size: 0.69rem;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    color: #e1c99e;
+  }
+  #map-instructions {
+    font-size: 0.88rem;
+    line-height: 1.6;
+    color: #d6e6dd;
+    margin-top: 10px;
+  }
+  .map-detail-number {
+    font-family: var(--heading-font);
+    font-size: 3.7rem;
+    font-style: italic;
+    line-height: 1.2;
+    color: #bad0be;
+    margin: 29px 0 20px;
+  }
+  .map-city {
+    font-size: 0.84rem;
+    line-height: 1.4;
+    color: #e1c99e;
+  }
+  .map-city span {
+    white-space: nowrap;
+  }
+  .map-chapter-detail h3 {
+    font-size: 1.85rem;
+    line-height: 1.35;
+    margin: 12px 0 16px;
+  }
+  .map-parish {
+    font-size: 0.94rem;
+    color: #d6e6dd;
+    line-height: 1.65;
+  }
+  .map-chapter-detail .text-link {
+    margin-top: 24px;
+    font-size: 0.85rem;
+    gap: 0.8rem;
+    color: white;
+  }
+  .map-chapter-detail .text-link:hover {
+    color: #e1c99e;
+  }
+  .map-pagination {
+    border-top: 1px solid #ffffff40;
+    padding-top: 20px;
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  #map-chapter-details {
+    padding-bottom: 30px;
+    min-height: 380px;
+  }
+  .map-pagination > span {
+    font-size: 0.75rem;
+    color: #d6e6dd;
+  }
+  .map-pagination > div {
+    display: flex;
+    gap: 6px;
+  }
+  .map-pagination button {
+    width: 44px;
+    height: 44px;
+    border: 1px solid #ffffff70;
+    background: transparent;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  .map-pagination button:hover {
+    background: #ffffff18;
+  }
+  .unmapped-note {
+    font-size: 0.9rem;
+    color: var(--muted);
+    margin-top: 15px;
+  }
+  @container (max-width: 570px) {
+    .pin-city {
+      display: none;
+    }
+    .ontario-overview {
+      width: 80px;
+      top: 12px;
+      left: 12px;
+      padding: 7px;
+    }
+    .ontario-overview svg {
+      height: 65px;
+    }
+    .ontario-overview span {
+      font-size: 8px;
+    }
+  }
+  @media (max-width: 1000px) {
+    .map-layout {
+      grid-template-columns: minmax(0, 1fr) 285px;
+    }
+    .map-sidebar {
+      padding: 24px;
+    }
+  }
+  @media (max-width: 800px) {
+    .map-layout {
+      grid-template-columns: 1fr;
+    }
+    .map-sidebar {
+      padding: 25px;
+    }
+    .map-detail-number {
+      float: right;
+      font-size: 3.4rem;
+      margin: 14px 0 0 15px;
+    }
+    .map-city {
+      margin-top: 24px;
+    }
+    .map-chapter-detail h3 {
+      font-size: 1.7rem;
+    }
+    #map-chapter-details {
+      min-height: 244px;
+      padding-bottom: 24px;
+    }
+    .map-chapter-detail .text-link {
+      margin-top: 16px;
+    }
+    .map-pagination {
+      padding-top: 15px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .map-pin {
+      transition: none;
+    }
+  }
+</style>

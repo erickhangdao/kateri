@@ -1,0 +1,62 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ResourceRow from "../../components/ResourceRow.astro";
+import { byOrder } from "../../lib/content";
+const resources = (await getCollection("resources")).sort(byOrder);
+const categories = [...new Set(resources.map((item) => item.data.category))];
+---
+
+<BaseLayout
+  title="Resources & forms | Liên Đoàn Kateri"
+  description="Download forms and find training, prayer, and safeguarding resources for VEYM chapters and youth leaders in Ontario."
+>
+  <div class="container page-header">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a> / Resources
+    </nav>
+    <p class="eyebrow" lang="vi">
+      TÀI LIỆU & BIỂU MẪU
+    </p>
+    <h1>Resources for the journey</h1>
+    <p class="lead">
+      Forms, formation materials, and guidance for our chapters. Check with your
+      chapter leader about the documents needed for your activity.
+    </p>
+  </div>
+  <div class="container page-content narrow">
+    <div class="resource-controls" hidden>
+      <label for="category">Browse by category</label>
+      <select id="category">
+        <option value="all">All resources</option>
+        {categories.map((category) => (
+          <option value={category}>{category}</option>
+        ))}
+      </select>
+      <span id="resource-count" role="status" aria-live="polite"></span>
+    </div>
+    <div id="resource-list">
+      {resources.map((resource) => (
+        <ResourceRow resource={resource} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+<script>
+  const controls = document.querySelector<HTMLElement>(".resource-controls");
+  if (controls) controls.hidden = false;
+  const select = document.querySelector<HTMLSelectElement>("#category");
+  const rows = [
+    ...document.querySelectorAll<HTMLElement>("#resource-list .resource-row"),
+  ];
+  select?.addEventListener("change", () => {
+    rows.forEach((row) => {
+      row.hidden =
+        select.value !== "all" && row.dataset.category !== select.value;
+    });
+    const count = rows.filter((row) => !row.hidden).length;
+    const status = document.querySelector("#resource-count");
+    if (status)
+      status.textContent = `${count} resource${count === 1 ? "" : "s"}`;
+  });
+</script>

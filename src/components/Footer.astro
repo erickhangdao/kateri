@@ -1,0 +1,33 @@
+---
+import type { Settings } from "../lib/content";
+interface Props {
+  settings: Settings;
+}
+const { settings } = Astro.props;
+---
+
+<footer class="site-footer">
+  <div class="container footer-main">
+    <div>
+      <p class="eyebrow" lang="vi">
+        LIÊN ĐOÀN
+      </p>
+      <h2>{settings.shortName}</h2>
+      <p>{settings.footer}</p>
+    </div>
+    <div class="footer-links">
+      <a href={settings.veymUrl}>VEYM Canada ↗</a>
+      {settings.facebook && <a href={settings.facebook}>Facebook ↗</a>}
+      <a href={`mailto:${settings.contactEmail}`}>Email us ↗</a>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>
+      © {new Date().getFullYear()} {settings.name}
+    </span>
+    <span>
+      <a href="/privacy/">Privacy & accessibility</a>
+      <a href="/keystatic/">Webmaster</a>
+    </span>
+  </div>
+</footer>
