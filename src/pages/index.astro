@@ -37,7 +37,7 @@ const current = announcements
           <h2 id="announcements-title">Announcements</h2>
         </div>
         <a class="text-link" href="/announcements/">
-          All announcements <span aria-hidden="true">↗</span>
+          All announcements
         </a>
       </div>
       {current[0] ? (
@@ -50,7 +50,7 @@ const current = announcements
             for upcoming activities.
           </p>
           <a href="/announcements/" class="text-link">
-            Browse past announcements ↗
+            Browse past announcements
           </a>
         </div>
       )}
@@ -78,7 +78,7 @@ const current = announcements
           leaders.
         </p>
         <a class="text-link" href="/resources/">
-          View all resources <span aria-hidden="true">↗</span>
+          View all resources
         </a>
       </div>
       <div>
@@ -101,15 +101,15 @@ const current = announcements
     <p class="lead">{settings.contactText}</p>
     <a class="contact-email" href={`mailto:${settings.contactEmail}`}>
       <span class="contact-email-address">{settings.contactEmail}</span>
-      <span aria-hidden="true">↗</span>
+
     </a>
     <div class="contact-links">
       <span>{settings.region}</span>
       {settings.facebook && (
-        <a href={settings.facebook}>Follow on Facebook ↗</a>
+        <a href={settings.facebook}>Follow on Facebook</a>
       )}
-      {settings.instagram && <a href={settings.instagram}>Instagram ↗</a>}
-      <a href={settings.veymUrl}>VEYM Canada ↗</a>
+      {settings.instagram && <a href={settings.instagram}>Instagram</a>}
+      <a href={settings.veymUrl}>VEYM Canada</a>
     </div>
   </section>
 </BaseLayout>

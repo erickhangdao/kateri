@@ -148,13 +148,9 @@ main:focus {
   min-height: 44px;
   font-size: 0.98rem;
   font-weight: 650;
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
+  text-decoration: underline;
+  text-underline-offset: 0.28em;
   width: fit-content;
-}
-.text-link span {
-  font-size: 1.25rem;
-  font-weight: 400;
 }
 .button {
   display: inline-flex;
@@ -694,7 +690,7 @@ main:focus {
 }
 .chapter h3 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: underline;
   text-underline-offset: 0.18em;
 }
 .chapter h3 a:hover,
@@ -823,7 +819,7 @@ main:focus {
 }
 .resource-row {
   display: grid;
-  grid-template-columns: 48px 1fr 44px;
+  grid-template-columns: 48px minmax(0, 1fr);
   gap: 20px;
   align-items: start;
   padding: 25px 0;
@@ -836,7 +832,7 @@ main:focus {
   line-height: 1.5;
 }
 .resource-row h3 a {
-  text-decoration: none;
+  text-decoration: underline;
 }
 .resource-row h3 a:hover {
   text-decoration: underline;
@@ -875,19 +871,6 @@ main:focus {
   font-weight: 600;
   letter-spacing: 0.06em;
   color: var(--secondary);
-}
-.resource-action {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.4rem;
-  width: 44px;
-  height: 44px;
-  border: 1px solid var(--border);
-  text-decoration: none;
-}
-.resource-action:hover {
-  border-color: var(--primary);
 }
 .contact-section {
   text-align: center;
@@ -1419,7 +1402,7 @@ main:focus {
     max-width: none;
   }
   .resource-row {
-    grid-template-columns: 35px 1fr 38px;
+    grid-template-columns: 35px minmax(0, 1fr);
     gap: 12px;
     padding-block: 22px;
   }
@@ -1427,10 +1410,6 @@ main:focus {
     width: 33px;
     height: 43px;
     font-size: 0.52rem;
-  }
-  .resource-action {
-    width: 38px;
-    height: 44px;
   }
   .resource-row h3 {
     font-size: 1.04rem;

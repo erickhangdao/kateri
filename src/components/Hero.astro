@@ -2,7 +2,7 @@
 import { Image } from "astro:assets";
 import type { Settings } from "../lib/content";
 import heroBanner from "../assets/images/hero-banner.webp";
-import heroCoat from "../assets/images/hero-coat-of-arms.webp";
+import heroCoat from "../assets/images/hero-coat-of-arms-yellow-maple.webp";
 interface Props {
   settings: Settings;
 }
@@ -39,10 +39,10 @@ const { settings } = Astro.props;
       <p class="hero-description">{settings.introduction}</p>
       <div class="actions">
         <a class="button" href="#chapters">
-          Discover our chapters <span aria-hidden="true">↗</span>
+          Discover our chapters
         </a>
         <a class="text-link" href="#announcements">
-          Latest announcements <span aria-hidden="true">↓</span>
+          Latest announcements
         </a>
       </div>
     </div>

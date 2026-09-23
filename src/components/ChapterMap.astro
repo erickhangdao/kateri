@@ -131,7 +131,7 @@ const mapped = chapters.flatMap((chapter) => {
             <h3 lang="vi">
               {data.website || data.social ? (
                 <a href={data.website || data.social}>
-                  {data.name} <span aria-hidden="true">↗</span>
+                  {data.name}
                 </a>
               ) : data.name}
             </h3>
@@ -470,7 +470,7 @@ const mapped = chapters.flatMap((chapter) => {
   }
   .map-chapter-detail h3 a {
     color: inherit;
-    text-decoration: none;
+    text-decoration: underline;
     text-underline-offset: 0.18em;
   }
   .map-chapter-detail h3 a:hover,

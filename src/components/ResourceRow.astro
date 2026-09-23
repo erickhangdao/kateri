@@ -18,7 +18,7 @@ const {
       {data.category} <span aria-hidden="true">·</span> {data.language}
     </p>
     <h3>
-      <a href={data.file || data.externalUrl}>{data.title}</a>
+      <a href={data.file || data.externalUrl} download={data.file ? true : undefined}>{data.title}</a>
     </h3>
     {data.titleVi && (
       <p lang="vi" class="translation">
@@ -31,12 +31,4 @@ const {
       <time datetime={data.updated}>{formatDate(data.updated)}</time>
     </span>
   </div>
-  <a
-    class="resource-action"
-    href={data.file || data.externalUrl}
-    download={data.file ? true : undefined}
-    aria-label={`${data.file ? "Download" : "Open"} ${data.title}`}
-  >
-    <span aria-hidden="true">{data.file ? "↓" : "↗"}</span>
-  </a>
 </article>

@@ -73,14 +73,14 @@ const {
     <div class="actions">
       {registrationOpen(data) && (
         <a class="button" href={data.registrationUrl}>
-          Register <span aria-hidden="true">↗</span>
+          Register
         </a>
       )}
       <a
         class={registrationOpen(data) ? "text-link" : "button"}
         href={`/announcements/${id}/`}
       >
-        Details & documents <span aria-hidden="true">↗</span>
+        Details & documents
       </a>
     </div>
     <Downloads data={data} />
