@@ -27,7 +27,7 @@ The archived Emmaus notice publication date is a migration reference derived fro
 ## Content requiring leadership confirmation
 
 - Confirm preferred spelling for the committee names, which differs slightly between About and embedded Facebook posts.
-- Portraits and direct leadership emails were not reliably available; fields remain empty. No people were invented.
+- The site owner confirmed the four published direct leadership email addresses. Other contact fields remain empty unless supplied.
 - The old Parents/Guardians Consent Form – Liability Waiver entry has an empty body and no usable attached file. It is not offered as a download. Supply the approved blank form before adding it.
 - The Vietnamese organization introduction and full notice translations remain empty with editor notes; no machine translation is presented as official copy.
 - Confirm the permission to continue using historic photography. The image is explicitly captioned as community worship, with no claim that it depicts a current event.
@@ -39,6 +39,8 @@ The archived Emmaus notice publication date is a migration reference derived fro
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `src/assets/images/community.webp`                            | `https://kateri.veym.ca/wp-content/uploads/2026/04/cropped-20171007_113751-1400x386-1.jpg`                    |
 | `src/assets/images/crest.webp` and `public/icons/*.png` | Shield-only artwork derived from the user-provided `LD Kateri CoA (With maple leaf wreath).png`; wreath and motto excluded |
+| `src/assets/images/hero-banner.webp` | User-provided `LD Kateri Banner (1640 x 624 px).png`; optimized for the hero background. |
+| `src/assets/images/hero-coat-of-arms.webp` | User-provided `LD Kateri CoA (With maple leaf wreath)(1).png`; full coat of arms retained for the hero. |
 | `src/assets/images/teresa-hai-dong/crest.webp` | User-provided `Teresa Hai Dong - Scarborough.png`; bottom motto banner removed and exterior made transparent. |
 | `src/assets/images/patron.webp`                               | `https://kateri.veym.ca/wp-content/uploads/2022/03/kateri-2c.png`                                             |
 | `public/uploads/forms/promise-and-promotion-application.pdf` | `https://veym.ca/veymasset/resources/forms/Don_xin_Thang_Cap_Viet_Anh_(v13)_fillable.pdf`                     |

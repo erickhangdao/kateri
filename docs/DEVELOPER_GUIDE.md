@@ -150,7 +150,7 @@ A normal `<script>` block contains browser behavior and can use `document`, even
 | Search/social metadata                             | `src/components/SEO.astro`, page props, and Site settings               |
 | An old URL's replacement                           | `src/data/redirects.json`                                               |
 
-The homepage hero uses the logo chosen in Site settings, and its layout lives in `src/components/Hero.astro`. Every homepage section has the `home-section` class. The rule in `src/styles/global.css` gives each section at least one visible screen of height below the sticky header; long content is allowed to make a section taller. If you add a homepage section, include that class and an `id` matching its header link.
+The homepage hero uses `src/assets/images/hero-banner.webp` as its background and `src/assets/images/hero-coat-of-arms.webp` as its full coat of arms. Its layout lives in `src/components/Hero.astro` and its overlay, sizing, and text colors live in `src/styles/global.css`. The Site settings logo still controls the small shield in the header and other shared placements. Every homepage section has the `home-section` class. The rule in `src/styles/global.css` gives each section at least one visible screen of height below the sticky header; long content is allowed to make a section taller. If you add a homepage section, include that class and an `id` matching its header link.
 
 The leadership chart groups entries by the exact English `role` values in `src/components/Leadership.astro`: League Chaplain, President, the two Vice President roles, Treasurer, and Secretary. Keep those values when editing names. New roles display after the established tiers until you add them to `roleTiers`.
 
