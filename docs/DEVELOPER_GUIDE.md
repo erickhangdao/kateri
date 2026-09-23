@@ -92,7 +92,7 @@ flowchart TD
   HTML --> Enhancement[Small scripts enhance map, menu and filters]
 ```
 
-In local mode, the editor writes to your working folder. Review those changed files before committing. In production GitHub mode, saving writes a GitHub commit. A hosting integration must react to that commit, build the project, and replace the deployed application. The GitHub verification workflow alone does not deploy it.
+In local mode, the editor writes to your working folder. Review those changed files before committing. In production GitHub mode, `src/middleware.ts` checks the signed-in account's effective GitHub permission on the configured repository before allowing the dashboard; only Write, Maintain, and Admin are accepted. The permission check lives in `src/lib/keystatic-access.mjs` and fails closed if GitHub cannot be reached. In production GitHub mode, saving writes a GitHub commit. A hosting integration must react to that commit, build the project, and replace the deployed application. The GitHub verification workflow alone does not deploy it.
 
 ### Follow one chapter from editor to screen
 

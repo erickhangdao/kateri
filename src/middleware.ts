@@ -1,5 +1,11 @@
 import { defineMiddleware } from "astro:middleware";
 import redirects from "./data/redirects.json";
+import {
+  cookieValue,
+  hasKeystaticWriteAccess,
+  issuedAccessToken,
+  keystaticAccessDenied,
+} from "./lib/keystatic-access.mjs";
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const path = context.url.pathname;
@@ -27,6 +33,23 @@ export const onRequest = defineMiddleware(async (context, next) => {
       },
     );
   }
+  // Keystatic can show its dashboard to people who can only read the repo.
+  // Check effective GitHub Write access before serving the editor.
+  if (import.meta.env.PROD && /^\/keystatic(?:\/|$)/.test(path)) {
+    const token = cookieValue(
+      context.request.headers.get("Cookie") || "",
+      "keystatic-gh-access-token",
+    );
+    if (
+      token &&
+      !(await hasKeystaticWriteAccess(
+        token,
+        import.meta.env.PUBLIC_GITHUB_REPO,
+      ))
+    ) {
+      return keystaticAccessDenied();
+    }
+  }
   const key =
     path.endsWith("/") || /\.[a-z0-9]+$/i.test(path) ? path : `${path}/`;
   const target = (redirects as Record<string, string>)[key];
@@ -41,6 +64,23 @@ export const onRequest = defineMiddleware(async (context, next) => {
     return context.redirect(`${path}/${context.url.search}`, 301);
   }
   const response = await next();
+  // Reject read-only accounts immediately after OAuth or token renewal.
+  if (
+    import.meta.env.PROD &&
+    (path === "/api/keystatic/github/oauth/callback" ||
+      path === "/api/keystatic/github/refresh-token")
+  ) {
+    const token = issuedAccessToken(response);
+    if (
+      token &&
+      !(await hasKeystaticWriteAccess(
+        token,
+        import.meta.env.PUBLIC_GITHUB_REPO,
+      ))
+    ) {
+      return keystaticAccessDenied();
+    }
+  }
   response.headers.set("X-Content-Type-Options", "nosniff");
   response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   response.headers.set("X-Frame-Options", "SAMEORIGIN");

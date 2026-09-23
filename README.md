@@ -44,7 +44,7 @@ Public production HTML includes its small stylesheets and uses native gzip compr
 
 ### Sign in
 
-Open `/keystatic/` on the production site and choose **Sign in with GitHub**. Your GitHub account needs write access to the website repository, and the website's GitHub App must be installed on that repository. Ask the current webmaster for an invitation. Do not share credentials.
+Open `/keystatic/` on the production site and choose **Sign in with GitHub**. Your account needs Write, Maintain, or Admin access to the website repository. The server checks that permission with GitHub after sign-in and before serving the dashboard; other accounts receive HTTP 403. Ask the current webmaster for an invitation. Do not share credentials.
 
 Select the publishing branch configured by your webmaster, normally `main`. Saving commits the content to GitHub. The host must rebuild and deploy when that branch changes; wait for the successful deployment before expecting public changes. The content collections are bundled at build time, not fetched from GitHub on each visit.
 
@@ -100,7 +100,7 @@ Images are uploaded into `src/assets/images/` and rendered using Astro's image t
 | `HOST`                             | Runtime      | `0.0.0.0` behind your host's proxy                 |
 | `PORT`                             | Runtime      | The port provided by your hosting platform         |
 
-The admin and API return HTTP 503 until production GitHub configuration is present; production never falls back to local editing. Credentials must be provisioned to test production login. Admin routes return `X-Robots-Tag: noindex, nofollow`, are excluded from the sitemap, and are disallowed in robots.txt.
+The admin and API return HTTP 503 until production GitHub configuration is present; production never falls back to local editing. After GitHub sign-in, the server checks the account's effective permission on `PUBLIC_GITHUB_REPO` and refuses dashboard access below Write. A temporary GitHub API failure also denies access. This check is production-only; `npm run dev` uses credential-free local mode unless `PUBLIC_KEYSTATIC_MODE=github` is set. Credentials must be provisioned to test production login. Admin routes return `X-Robots-Tag: noindex, nofollow`, are excluded from the sitemap, and are disallowed in robots.txt.
 
 ## Deployment
 
