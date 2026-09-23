@@ -13,23 +13,6 @@ const {
 ---
 
 <article class="featured-announcement">
-  <div class="featured-aside">
-    <span class="featured-word" lang="vi">
-      Cùng
-      <br />
-      đồng hành.
-    </span>
-    <p>Walking together in faith.</p>
-    {data.image && (
-      <Image
-        src={managedImage(data.image)}
-        alt={data.imageAlt}
-        width={500}
-        loading="lazy"
-        format="webp"
-      />
-    )}
-  </div>
   <div class="featured-body">
     <div class="meta">
       <time datetime={data.published}>{formatDate(data.published)}</time>
@@ -43,6 +26,16 @@ const {
       </p>
     )}
     <p class="lead">{data.summary}</p>
+    {data.image && (
+      <Image
+        class="featured-image"
+        src={managedImage(data.image)}
+        alt={data.imageAlt}
+        width={500}
+        loading="lazy"
+        format="webp"
+      />
+    )}
     {(data.eventStart || data.location || data.registrationDeadline) && (
       <dl class="event-facts">
         {data.eventStart && (
