@@ -18,7 +18,7 @@ Source reviewed on September 21–22, 2026: [Kateri](https://kateri.veym.ca/), i
 | Hiệp Sĩ Trưởng Thành ceremony                           | Downloaded original DOCX                                                                  |
 | Toronto, Hamilton, London safeguarding guidance         | External diocesan resources; source publication dates retained                            |
 | Official email, Facebook, VEYM Canada                   | Editable contact / affiliation settings                                                   |
-| Historic community Mass photograph, crest, patron image | Reused existing Kateri assets; local copies and optimized rendering                       |
+| Historic community Mass photograph, patron image | Reused existing Kateri assets; local copies and optimized rendering                       |
 
 The archived Emmaus notice publication date is a migration reference derived from the poster media record (February 5, 2026; WordPress media ID 57130), not a newly announced event. Its source/event information is retained in editor notes.
 
@@ -28,7 +28,7 @@ The archived Emmaus notice publication date is a migration reference derived fro
 - Portraits and direct leadership emails were not reliably available; fields remain empty. No people were invented.
 - The old Parents/Guardians Consent Form – Liability Waiver entry has an empty body and no usable attached file. It is not offered as a download. Supply the approved blank form before adding it.
 - The Vietnamese organization introduction and full notice translations remain empty with editor notes; no machine translation is presented as official copy.
-- Confirm the permission to continue using historic photography and the site's current crest. The image is explicitly captioned as community worship, with no claim that it depicts a current event.
+- Confirm the permission to continue using historic photography. The image is explicitly captioned as community worship, with no claim that it depicts a current event.
 - The initial resource dates describe source publication, not a claim of a newly approved policy edition.
 
 ## Assets and sources
@@ -36,7 +36,7 @@ The archived Emmaus notice publication date is a migration reference derived fro
 | Local asset                                                  | Source                                                                                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `src/assets/images/community.jpg`                            | `https://kateri.veym.ca/wp-content/uploads/2026/04/cropped-20171007_113751-1400x386-1.jpg`                    |
-| `src/assets/images/crest.png`                                | `https://kateri.veym.ca/wp-content/uploads/2026/04/cropped-ChatGPT-LD-Kateri-CoA-3-Shield-Only-3D-Square.png` |
+| `src/assets/images/crest.png` and `public/icons/*.png` | Shield-only artwork derived from the user-provided `LD Kateri CoA (With maple leaf wreath).png`; wreath and motto excluded |
 | `src/assets/images/patron.png`                               | `https://kateri.veym.ca/wp-content/uploads/2022/03/kateri-2c.png`                                             |
 | `public/uploads/forms/promise-and-promotion-application.pdf` | `https://veym.ca/veymasset/resources/forms/Don_xin_Thang_Cap_Viet_Anh_(v13)_fillable.pdf`                     |
 | `public/uploads/documents/hstt-promise-ceremony.docx`        | `https://kateri.veym.ca/wp-content/uploads/2025/09/NGHI-THUC-TUYEN-HUA-HSTT-GENERAL.docx`                     |

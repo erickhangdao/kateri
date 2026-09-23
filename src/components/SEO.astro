@@ -25,6 +25,11 @@ const socialImage = await getImage({
   width: 1400,
   format: "jpg",
 });
+const logoImage = await getImage({
+  src: managedImage(settings.logo),
+  width: 512,
+  format: "png",
+});
 const graph = [
   {
     "@type": "Organization",
@@ -32,6 +37,7 @@ const graph = [
     name: settings.name,
     alternateName: settings.englishName,
     url: Astro.site,
+    logo: new URL(logoImage.src, Astro.site!).href,
     email: settings.contactEmail,
     areaServed: { "@type": "AdministrativeArea", name: "Ontario, Canada" },
     parentOrganization: {
