@@ -37,13 +37,13 @@ const { settings } = Astro.props;
   </div>
   <div class="motto-strip">
     <div class="container">
-      <span class="motto-latin" lang="la">
+      <span class="motto-text" lang="la">
         {settings.motto}
       </span>
       <span class="motto-cross" aria-hidden="true">
         ✦
       </span>
-      <span>{settings.mottoTranslation}</span>
+      <span class="motto-text" lang="en">{settings.mottoTranslation}</span>
     </div>
   </div>
 </section>

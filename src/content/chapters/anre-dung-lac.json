@@ -7,7 +7,9 @@
   "social": "https://www.facebook.com/congdoanducmelavang",
   "imageAlt": "",
   "order": 2,
-  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified.",
+  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified. Address, public contact information, and named BTV roles checked against https://kateri.veym.ca/about/ on 2026-09-23. Blank BTV positions on that page are not displayed. No named BTV members are published on the source page.",
   "latitude": 43.59,
-  "longitude": -79.645
+  "longitude": -79.645,
+  "address": "255 Export Blvd, Mississauga, ON L5S 1Y4",
+  "btv": []
 }

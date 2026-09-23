@@ -9,5 +9,30 @@
   "social": "https://www.instagram.com/tntt.windsor/",
   "image": "/src/assets/images/ane-thanh/image.webp",
   "order": 1,
-  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified."
+  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified. Address, public contact information, and named BTV roles checked against https://kateri.veym.ca/about/ on 2026-09-23. Blank BTV positions on that page are not displayed.",
+  "address": "700 Campbell, Windsor, ON N9B 2H7",
+  "termStart": "2024-06-02",
+  "termEnd": "2027-06-02",
+  "btv": [
+    {
+      "role": "Đoàn Trưởng",
+      "name": "Anna Maria Nguyễn Ngọc Hải My Mimi"
+    },
+    {
+      "role": "Đoàn Phó Quản Trị",
+      "name": "Maria Phạm Như Huyền Catherine"
+    },
+    {
+      "role": "Đoàn Phó Nghiên Huấn",
+      "name": "Josephine Nguyễn Phạm Trân Châu"
+    },
+    {
+      "role": "Thư Ký",
+      "name": "Anna Maria Phạm Ngọc Thu"
+    },
+    {
+      "role": "Thủ Quỹ",
+      "name": "Gioan Baotixita Vũ Quốc Thắng Thomas"
+    }
+  ]
 }

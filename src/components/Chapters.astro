@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from "astro:content";
 import ChapterMap from "./ChapterMap.astro";
+import ChapterInfo from "./ChapterInfo.astro";
 interface Props {
   chapters: CollectionEntry<"chapters">[];
 }
@@ -18,7 +19,7 @@ const listChapters = [...chapters].sort((a, b) =>
   <div class="container">
     <div class="section-heading">
       <div>
-        <h2 id="chapters-title">Chapters</h2>
+        <h2 id="chapters-title">Our Chapters</h2>
       </div>
       <p>
         Find your community.
@@ -65,6 +66,7 @@ const listChapters = [...chapters].sort((a, b) =>
             ) : data.name}
           </h3>
           {data.parish && <p>{data.parish}</p>}
+          <ChapterInfo chapter={data} />
         </article>
       ))}
     </div>

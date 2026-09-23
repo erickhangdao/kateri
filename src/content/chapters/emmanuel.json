@@ -7,8 +7,33 @@
   "social": "https://www.facebook.com/emmanuel.tntt.1",
   "imageAlt": "Đoàn Emmanuel crest",
   "order": 4,
-  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified.",
+  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified. Address, public contact information, and named BTV roles checked against https://kateri.veym.ca/about/ on 2026-09-23. Blank BTV positions on that page are not displayed. The listed 2024–2026 BTV term ended on 2026-09-20; show as a past term until a newer roster is published.",
   "latitude": 43.77,
   "longitude": -79.411,
-  "image": "/src/assets/images/emmanuel/crest.webp"
+  "image": "/src/assets/images/emmanuel/crest.webp",
+  "address": "2747 Jane Street, North York, ON M3L 2E8",
+  "termStart": "2024-09-22",
+  "termEnd": "2026-09-20",
+  "btv": [
+    {
+      "role": "Đoàn Trưởng",
+      "name": "Maria Phan Thanh Hiền"
+    },
+    {
+      "role": "Đoàn Phó Quản Trị",
+      "name": "Maria Bùi Thị Ái Trầm"
+    },
+    {
+      "role": "Đoàn Phó Nghiên Huấn",
+      "name": "Maria Vũ Thị Phương Thư"
+    },
+    {
+      "role": "Thư Ký",
+      "name": "Giuse Nguyễn Trần Đăng Quang"
+    },
+    {
+      "role": "Thủ Quỹ",
+      "name": "Maria Nguyễn Trần Quỳnh Như"
+    }
+  ]
 }

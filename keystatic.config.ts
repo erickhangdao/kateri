@@ -1,9 +1,46 @@
 import { collection, config, fields, singleton } from "@keystatic/core";
+import { createElement, useRef } from "react";
 
 const text = (label: string, multiline = false) =>
   fields.text({ label, multiline });
 const url = (label: string) => fields.url({ label });
 type Asset = { data: Uint8Array; extension: string; filename: string } | null;
+async function convertToWebp(value: NonNullable<Asset>): Promise<NonNullable<Asset>> {
+  const inputType: Record<string, string> = {
+    png: "image/png",
+    jpg: "image/jpeg",
+    jpeg: "image/jpeg",
+    avif: "image/avif",
+  };
+  const type = inputType[value.extension.toLowerCase()];
+  if (!type) throw new Error("Upload a PNG, JPEG, AVIF, or WebP image.");
+  const source = new Blob([Uint8Array.from(value.data)], { type });
+  const bitmap = await createImageBitmap(source);
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = bitmap.width;
+    canvas.height = bitmap.height;
+    const context = canvas.getContext("2d");
+    if (!context) throw new Error("Image conversion is unavailable in this browser.");
+    context.drawImage(bitmap, 0, 0);
+    const encoded = await new Promise<Blob>((resolve, reject) => {
+      canvas.toBlob(
+        (blob) => blob ? resolve(blob) : reject(new Error("WebP conversion failed.")),
+        "image/webp",
+        0.92,
+      );
+    });
+    if (encoded.type !== "image/webp")
+      throw new Error("This browser cannot create WebP images.");
+    return {
+      data: new Uint8Array(await encoded.arrayBuffer()),
+      extension: "webp",
+      filename: value.filename.replace(/\.[^.]+$/, "") + ".webp",
+    };
+  } finally {
+    bitmap.close();
+  }
+}
 function safeAsset(
   field: ReturnType<typeof fields.file>,
   extensions: string[],
@@ -35,7 +72,20 @@ function safeAsset(
     validate(value: Asset) {
       if (value) {
         if (!extensions.includes(value.extension.toLowerCase()))
-          throw new Error(`Allowed file types: ${extensions.join(", ")}`);
+          throw new Error(
+            extensions.length === 1 && extensions[0] === "webp"
+              ? "Wait for WebP conversion to finish, or upload a WebP file."
+              : `Allowed file types: ${extensions.join(", ")}`,
+          );
+        if (
+          extensions.length === 1 &&
+          extensions[0] === "webp" &&
+          !(
+            new TextDecoder().decode(value.data.slice(0, 4)) === "RIFF" &&
+            new TextDecoder().decode(value.data.slice(8, 12)) === "WEBP"
+          )
+        )
+          throw new Error("The image must contain valid WebP data.");
         if (value.data.byteLength > 20 * 1024 * 1024)
           throw new Error("Files must be smaller than 20 MB.");
         const header = new TextDecoder().decode(value.data.slice(0, 512));
@@ -46,15 +96,36 @@ function safeAsset(
     },
   };
 }
-const image = (label: string) =>
-  safeAsset(
+const image = (label: string) => {
+  const field = safeAsset(
     fields.image({
       label,
+      description: "PNG, JPEG, and AVIF uploads are converted to WebP before saving.",
       directory: "src/assets/images",
       publicPath: "/src/assets/images/",
     }),
-    ["png", "jpg", "jpeg", "webp", "avif"],
+    ["webp"],
   );
+  function WebpImageInput(props: Parameters<typeof field.Input>[0]) {
+    const currentUpload = useRef(0);
+    return createElement(field.Input, {
+      ...props,
+      onChange(value) {
+        const upload = ++currentUpload.current;
+        props.onChange(value);
+        if (!value || value.extension.toLowerCase() === "webp") return;
+        void convertToWebp(value)
+          .then((converted) => {
+            if (upload === currentUpload.current) props.onChange(converted);
+          })
+          .catch(() => {
+            // A failed conversion leaves an invalid selection that cannot be saved.
+          });
+      },
+    });
+  }
+  return { ...field, Input: WebpImageInput };
+};
 const file = (
   label: string,
   folder = "documents",
@@ -212,6 +283,21 @@ export default config({
           validation: { min: -180, max: 180 },
         }),
         parish: text("Parish / community"),
+        address: text("Meeting address"),
+        phone: text("Public chapter phone"),
+        email: text("Public chapter email"),
+        termStart: fields.date({ label: "BTV term start" }),
+        termEnd: fields.date({ label: "BTV term end" }),
+        btv: fields.array(
+          fields.object({
+            role: text("Role"),
+            name: text("Person"),
+          }),
+          {
+            label: "Ban Thường Vụ Đoàn",
+            itemLabel: (item) => item.fields.role.value || "Role",
+          },
+        ),
         website: url("Website"),
         social: url("Social link"),
         image: image("Chapter crest"),
@@ -256,12 +342,13 @@ export default config({
         mottoTranslation: text("Motto translation"),
         introduction: text("Introduction", true),
         introductionVi: text("Approved Vietnamese introduction", true),
-        about: text("About VEYM", true),
-        history: text("League history", true),
+        about: text("About introduction (two short paragraphs)", true),
+        history: text("League history (Learn more)", true),
         logo: image("League crest"),
         patronImage: image("Patron saint image"),
         patronAlt: text("Patron image description"),
-        patronText: text("Patron saint biography (blank line between paragraphs)", true),
+        patronSummary: text("Patron saint introduction", true),
+        patronText: text("Full patron saint biography (Learn more)", true),
         patronFacts: text("Patron saint dates (one Label: value per line)", true),
         contactEmail: text("Contact email"),
         contactText: text("Contact invitation", true),

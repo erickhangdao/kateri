@@ -2,7 +2,7 @@ import { getEntry } from "astro:content";
 import type { ImageMetadata } from "astro";
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/assets/images/**/*.{png,jpg,jpeg,webp,avif}",
+  "/src/assets/images/**/*.webp",
   { eager: true },
 );
 export function managedImage(path: string) {

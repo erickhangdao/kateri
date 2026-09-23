@@ -5,18 +5,19 @@ interface Props {
   settings: Settings;
 }
 const { settings } = Astro.props;
-const copy = [settings.about, settings.history].filter(Boolean).join("\n\n");
-const lines = copy.split(/\r?\n/);
-const listStart = lines.findIndex((line) => /^-\s+/.test(line));
-const prose = (listStart < 0 ? lines : lines.slice(0, listStart))
-  .join("\n")
-  .split(/\n\s*\n/)
-  .map((paragraph) => paragraph.trim())
-  .filter(Boolean);
-const patronParagraphs = settings.patronText
-  .split(/\n\s*\n/)
-  .map((paragraph) => paragraph.trim())
-  .filter(Boolean);
+const paragraphs = (copy: string) =>
+  copy
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+const aboutParagraphs = paragraphs(settings.about);
+const historyLines = settings.history.split(/\r?\n/);
+const listStart = historyLines.findIndex((line) => /^-\s+/.test(line));
+const historyParagraphs = paragraphs(
+  (listStart < 0 ? historyLines : historyLines.slice(0, listStart)).join("\n"),
+);
+const patronSummary = paragraphs(settings.patronSummary ?? "");
+const patronParagraphs = paragraphs(settings.patronText);
 const patronFacts = (settings.patronFacts ?? "")
   .split(/\r?\n/)
   .map((line) => {
@@ -28,7 +29,7 @@ const patronFacts = (settings.patronFacts ?? "")
   .filter((fact): fact is { label: string; value: string } => Boolean(fact?.label && fact.value));
 const chapterGroups: { diocese: string; chapters: string[] }[] = [];
 if (listStart >= 0) {
-  for (const line of lines.slice(listStart)) {
+  for (const line of historyLines.slice(listStart)) {
     const diocese = line.match(/^-\s+(.+)/);
     const chapter = line.match(/^\s+-\s+(.+)/);
     if (diocese) chapterGroups.push({ diocese: diocese[1], chapters: [] });
@@ -46,24 +47,33 @@ if (listStart >= 0) {
   <div>
     <h2 id="about-title">About</h2>
     <div class="about-copy">
-      {prose.map((paragraph, index) => (
-        <p class:list={[{ lead: index === 0 }]}>
-          {paragraph}
-        </p>
+      {aboutParagraphs.map((paragraph, index) => (
+        <p class:list={[{ lead: index === 0 }]}>{paragraph}</p>
       ))}
-      {chapterGroups.length > 0 && (
-        <ul class="diocese-list" aria-label="Chapters by diocese">
-          {chapterGroups.map(({ diocese, chapters }) => (
-            <li>
-              {diocese}
-              <ul>
-                {chapters.map((chapter) => <li>{chapter}</li>)}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      )}
       {settings.introductionVi && <p lang="vi">{settings.introductionVi}</p>}
+      {(historyParagraphs.length > 0 || chapterGroups.length > 0) && (
+        <details class="about-disclosure">
+          <summary>
+            <span class="when-closed">Learn more</span>
+            <span class="when-open">Show less</span>
+          </summary>
+          <div class="disclosure-content">
+            {historyParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+            {chapterGroups.length > 0 && (
+              <ul class="diocese-list" aria-label="Chapters by diocese">
+                {chapterGroups.map(({ diocese, chapters }) => (
+                  <li>
+                    {diocese}
+                    <ul>
+                      {chapters.map((chapter) => <li>{chapter}</li>)}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </details>
+      )}
     </div>
   </div>
   <aside class="patron">
@@ -79,17 +89,30 @@ if (listStart >= 0) {
     <div>
       <h3>St. Kateri Tekakwitha</h3>
       <div class="patron-copy">
-        {patronParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+        {patronSummary.map((paragraph) => <p>{paragraph}</p>)}
       </div>
-      {patronFacts.length > 0 && (
-        <dl class="patron-facts">
-          {patronFacts.map(({ label, value }) => (
-            <div>
-              <dt>{label}</dt>
-              <dd>{value}</dd>
+      {(patronParagraphs.length > 0 || patronFacts.length > 0) && (
+        <details class="about-disclosure">
+          <summary>
+            <span class="when-closed">Learn more</span>
+            <span class="when-open">Show less</span>
+          </summary>
+          <div class="disclosure-content">
+            <div class="patron-copy">
+              {patronParagraphs.map((paragraph) => <p>{paragraph}</p>)}
             </div>
-          ))}
-        </dl>
+            {patronFacts.length > 0 && (
+              <dl class="patron-facts">
+                {patronFacts.map(({ label, value }) => (
+                  <div>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        </details>
       )}
       <p class="patron-prayer">Saint Kateri, pray for us.</p>
     </div>

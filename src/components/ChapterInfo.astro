@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { formatDate } from "../lib/content";
+import { ontarioToday } from "../lib/announcements.mjs";
+interface Props {
+  chapter: CollectionEntry<"chapters">["data"];
+  dark?: boolean;
+}
+const { chapter, dark = false } = Astro.props;
+const pastTerm = Boolean(chapter.termEnd && chapter.termEnd < ontarioToday());
+const phoneHref = chapter.phone.replace(/[^+\d]/g, "");
+const hasContact = Boolean(chapter.address || chapter.phone || chapter.email);
+---
+
+{(hasContact || chapter.btv.length > 0) && (
+  <div class:list={["chapter-info", { "chapter-info-dark": dark }]}>
+    {chapter.address && <address>{chapter.address}</address>}
+    {chapter.phone && <a href={`tel:${phoneHref}`}>{chapter.phone}</a>}
+    {chapter.email && <a href={`mailto:${chapter.email}`}>{chapter.email}</a>}
+    {chapter.btv.length > 0 && (
+      <section class="chapter-btv" aria-label={pastTerm ? "Past Ban Thường Vụ" : "Ban Thường Vụ"}>
+        <h4>{pastTerm ? "Past Ban Thường Vụ" : "Ban Thường Vụ"}</h4>
+        {(chapter.termStart || chapter.termEnd) && (
+          <p class="chapter-btv-term">
+            {chapter.termStart && formatDate(chapter.termStart)}
+            {chapter.termStart && chapter.termEnd && " – "}
+            {chapter.termEnd && formatDate(chapter.termEnd)}
+          </p>
+        )}
+        <dl>
+          {chapter.btv.map(({ role, name }) => (
+            <div>
+              <dt>{role}</dt>
+              <dd>{name}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+  </div>
+)}

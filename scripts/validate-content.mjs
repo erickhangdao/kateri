@@ -11,7 +11,7 @@ const documentTypes = new Set([
   ".txt",
   ".csv",
 ]);
-const imageTypes = new Set([".png", ".jpg", ".jpeg", ".webp", ".avif"]);
+const imageTypes = new Set([".webp"]);
 const paths = [];
 const dates = [
   "published",
@@ -161,6 +161,8 @@ function inspectUploads(directory, allowed) {
         failures.push(`Upload exceeds 20 MB: ${path}`);
       const header = readFileSync(path).subarray(0, 512).toString("latin1");
       const ext = extname(file.name).toLowerCase();
+      if (ext === ".webp" && !(header.startsWith("RIFF") && header.slice(8, 12) === "WEBP"))
+        failures.push(`Invalid WebP signature: ${path}`);
       if (ext === ".pdf" && !header.startsWith("%PDF-"))
         failures.push(`Invalid PDF signature: ${path}`);
       if ([".docx", ".xlsx", ".pptx"].includes(ext) && !header.startsWith("PK"))

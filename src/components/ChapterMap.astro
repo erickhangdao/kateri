@@ -4,6 +4,7 @@ import geography from "../data/ontario-map.json";
 import { Image } from "astro:assets";
 import { managedImage } from "../lib/content";
 import leagueCrest from "../assets/images/crest.webp";
+import ChapterInfo from "./ChapterInfo.astro";
 interface Props {
   chapters: CollectionEntry<"chapters">[];
 }
@@ -40,7 +41,6 @@ const mapped = chapters.flatMap((chapter) => {
         class="map-canvas"
         role="group"
         aria-label="Interactive map of chapter communities in southern Ontario"
-        aria-describedby="map-instructions"
       >
         <svg
           class="map-base"
@@ -109,10 +109,7 @@ const mapped = chapters.flatMap((chapter) => {
       </p>
     </div>
     <div class="map-sidebar">
-      <p id="map-instructions">
-        Hover, tap, or focus a marker to meet a chapter.
-      </p>
-      <div id="map-chapter-details" aria-live="polite" aria-atomic="true">
+      <div id="map-chapter-details" aria-live="polite" aria-atomic="true" aria-label="Chapter details" tabindex="0">
         {mapped.map(({ id, data }, index) => (
           <article
             class="map-chapter-detail"
@@ -139,6 +136,7 @@ const mapped = chapters.flatMap((chapter) => {
               ) : data.name}
             </h3>
             {data.parish && <p class="map-parish">{data.parish}</p>}
+            <ChapterInfo chapter={data} dark />
           </article>
         ))}
       </div>
@@ -183,6 +181,7 @@ const mapped = chapters.flatMap((chapter) => {
     const details = [
       ...section.querySelectorAll<HTMLElement>("[data-chapter-detail]"),
     ];
+    const detailPanel = section.querySelector<HTMLElement>("#map-chapter-details")!;
     let selected = 0;
     const showView = (view: string) => {
       map.hidden = view !== "map";
@@ -203,6 +202,7 @@ const mapped = chapters.flatMap((chapter) => {
       details.forEach((detail) => {
         detail.hidden = detail.dataset.chapterDetail !== id;
       });
+      detailPanel.scrollTop = 0;
       section.querySelector<HTMLElement>("[data-map-count]")!.textContent =
         String(selected + 1);
     };
@@ -271,9 +271,13 @@ const mapped = chapters.flatMap((chapter) => {
 
 <!-- Keep below-the-fold map styles local without another render-blocking request. -->
 <style is:inline>
+  #chapter-map {
+    container-type: inline-size;
+  }
   .map-layout {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 320px;
+    height: calc((100cqi - 322px) * 0.75 + 44px);
     border: 1px solid var(--border);
   }
   .map-geography {
@@ -431,14 +435,10 @@ const mapped = chapters.flatMap((chapter) => {
     background: var(--primary);
     color: white;
     padding: 32px;
-    display: flex;
-    flex-direction: column;
-  }
-  #map-instructions {
-    font-size: 0.88rem;
-    line-height: 1.6;
-    color: #d6e6dd;
-    margin-top: 0;
+    min-height: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
   }
   .map-detail-crest {
     height: 142px;
@@ -487,6 +487,7 @@ const mapped = chapters.flatMap((chapter) => {
     line-height: 1.65;
   }
   .map-pagination {
+    flex-shrink: 0;
     border-top: 1px solid #ffffff40;
     padding-top: 20px;
     margin-top: auto;
@@ -496,8 +497,12 @@ const mapped = chapters.flatMap((chapter) => {
     gap: 12px;
   }
   #map-chapter-details {
-    padding-bottom: 30px;
-    min-height: 380px;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    margin-right: -32px;
+    padding-right: 32px;
+    padding-bottom: 24px;
   }
   .map-pagination > span {
     font-size: 0.75rem;
@@ -544,17 +549,26 @@ const mapped = chapters.flatMap((chapter) => {
   @media (max-width: 1000px) {
     .map-layout {
       grid-template-columns: minmax(0, 1fr) 285px;
+      height: calc((100cqi - 287px) * 0.75 + 44px);
     }
     .map-sidebar {
       padding: 24px;
+    }
+    #map-chapter-details {
+      margin-right: -24px;
+      padding-right: 24px;
     }
   }
   @media (max-width: 800px) {
     .map-layout {
       grid-template-columns: 1fr;
+      height: auto;
     }
     .map-sidebar {
       padding: 25px;
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
     }
     .map-detail-crest {
       height: 116px;
@@ -571,7 +585,10 @@ const mapped = chapters.flatMap((chapter) => {
       font-size: 1.7rem;
     }
     #map-chapter-details {
-      min-height: 244px;
+      min-height: 0;
+      overflow: visible;
+      margin-right: 0;
+      padding-right: 0;
       padding-bottom: 24px;
     }
     .map-pagination {
