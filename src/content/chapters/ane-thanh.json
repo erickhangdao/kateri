@@ -3,11 +3,11 @@
   "patron": "Anê Thành",
   "city": "Windsor",
   "province": "Ontario",
+  "latitude": 42.315,
+  "longitude": -83.036,
   "parish": "Saint Philiphe Minh & Saint Ane Thanh Parish",
   "social": "https://www.instagram.com/tntt.windsor/",
-  "imageAlt": "",
+  "image": "/src/assets/images/ane-thanh/image.png",
   "order": 1,
-  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified.",
-  "latitude": 42.315,
-  "longitude": -83.036
+  "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified."
 }
