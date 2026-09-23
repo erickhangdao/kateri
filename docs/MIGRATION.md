@@ -41,7 +41,12 @@ The archived Emmaus notice publication date is a migration reference derived fro
 | `src/assets/images/crest.webp` and `public/icons/*.png` | Shield-only artwork derived from the user-provided `LD Kateri CoA (With maple leaf wreath).png`; wreath and motto excluded |
 | `src/assets/images/hero-banner.webp` | User-provided `LD Kateri Banner (1640 x 624 px).png`; optimized for the hero background. |
 | `src/assets/images/hero-coat-of-arms.webp` | User-provided `LD Kateri CoA (With maple leaf wreath)(1).png`; full coat of arms retained for the hero. |
-| `src/assets/images/teresa-hai-dong/crest.webp` | User-provided `Teresa Hai Dong - Scarborough.png`; bottom motto banner removed and exterior made transparent. |
+| `src/assets/images/teresa-hai-dong/crest.webp` | [Scarborough crest](https://kateri.veym.ca/wp-content/uploads/2024/05/THD-300-Shield-Blue-Mantling-with-motto-20240430-small-7.png) published on the Kateri About page. |
+| `src/assets/images/toma-thien/crest.webp` | [Toronto crest](https://kateri.veym.ca/wp-content/uploads/2022/03/Toma-Thien-Toronto-CoA-2.png) published on the Kateri About page. |
+| `src/assets/images/emmanuel/crest.webp` | [North York crest](https://kateri.veym.ca/wp-content/uploads/2022/03/Emmanuel-North-York-CoA-1.png) published on the Kateri About page. |
+| `src/assets/images/phanxico-xavie-can/crest.webp` | [Hamilton crest](https://kateri.veym.ca/wp-content/uploads/2022/03/Phanxico-Xavie-Can-Hamilton-CoA-1.png) published on the Kateri About page. |
+| `src/assets/images/anre-phu-yen/crest.webp` | [Kitchener-Waterloo crest](https://kateri.veym.ca/wp-content/uploads/2022/03/Anre-Phu-Yen-Kitchener-Waterloo-CoA-1.png) published on the Kateri About page. |
+| `src/assets/images/ane-thanh/crest.webp` | [Windsor crest](https://kateri.veym.ca/wp-content/uploads/2022/03/Ane-Thanh-Windsor-CoA-1.png) published on the Kateri About page. |
 | `src/assets/images/patron.webp`                               | `https://kateri.veym.ca/wp-content/uploads/2022/03/kateri-2c.png`                                             |
 | `public/uploads/forms/promise-and-promotion-application.pdf` | `https://veym.ca/veymasset/resources/forms/Don_xin_Thang_Cap_Viet_Anh_(v13)_fillable.pdf`                     |
 | `public/uploads/documents/hstt-promise-ceremony.docx`        | `https://kateri.veym.ca/wp-content/uploads/2025/09/NGHI-THUC-TUYEN-HUA-HSTT-GENERAL.docx`                     |
