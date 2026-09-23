@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import geography from "../data/ontario-map.json";
 import { Image } from "astro:assets";
 import { managedImage } from "../lib/content";
-import leagueCrest from "../assets/images/crest.png";
+import leagueCrest from "../assets/images/crest.webp";
 interface Props {
   chapters: CollectionEntry<"chapters">[];
 }
@@ -94,6 +94,7 @@ const mapped = chapters.flatMap((chapter) => {
               src={data.image ? managedImage(data.image) : leagueCrest}
               alt=""
               width={34}
+              format="webp"
               loading="lazy"
             />
             <span class="pin-city" aria-hidden="true">
@@ -123,6 +124,7 @@ const mapped = chapters.flatMap((chapter) => {
                 src={data.image ? managedImage(data.image) : leagueCrest}
                 alt={data.image ? data.imageAlt || data.name + " crest" : "Liên Đoàn Kateri crest"}
                 width={132}
+                format="webp"
                 loading="lazy"
               />
             </div>

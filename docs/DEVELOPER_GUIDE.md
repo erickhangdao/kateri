@@ -31,7 +31,7 @@ Open `http://127.0.0.1:4321/` for the website and `/keystatic/` for the editor. 
 | React               | Runs Keystatic's editor. Public pages use Astro and small browser scripts.       |
 | GitHub              | Stores source and content history; production CMS saves create commits.          |
 
-There is no separate content database. Images, public downloads, and content files belong in the repository. Production content is bundled during the build. A deployed page can decide whether a notice has expired today, but it cannot see a new GitHub content edit until the host rebuilds and deploys it.
+There is no separate content database. Optimized WebP images, public downloads, and content files belong in the repository. Resize oversized artwork before uploading it; the favicon and Apple touch icon stay PNG for compatibility. Production content is bundled during the build. A deployed page can decide whether a notice has expired today, but it cannot see a new GitHub content edit until the host rebuilds and deploys it.
 
 ## 3. Folder structure
 

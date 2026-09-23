@@ -113,6 +113,7 @@ const settings = defineCollection({
     patronImage: optionalText,
     patronAlt: optionalText,
     patronText: z.string(),
+    patronFacts: optionalText,
     contactEmail: z.email(),
     contactText: z.string(),
     facebook: webUrl,

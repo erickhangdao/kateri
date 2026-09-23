@@ -5,6 +5,37 @@ interface Props {
   settings: Settings;
 }
 const { settings } = Astro.props;
+const copy = [settings.about, settings.history].filter(Boolean).join("\n\n");
+const lines = copy.split(/\r?\n/);
+const listStart = lines.findIndex((line) => /^-\s+/.test(line));
+const prose = (listStart < 0 ? lines : lines.slice(0, listStart))
+  .join("\n")
+  .split(/\n\s*\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+const patronParagraphs = settings.patronText
+  .split(/\n\s*\n/)
+  .map((paragraph) => paragraph.trim())
+  .filter(Boolean);
+const patronFacts = (settings.patronFacts ?? "")
+  .split(/\r?\n/)
+  .map((line) => {
+    const separator = line.indexOf(":");
+    return separator < 0
+      ? null
+      : { label: line.slice(0, separator).trim(), value: line.slice(separator + 1).trim() };
+  })
+  .filter((fact): fact is { label: string; value: string } => Boolean(fact?.label && fact.value));
+const chapterGroups: { diocese: string; chapters: string[] }[] = [];
+if (listStart >= 0) {
+  for (const line of lines.slice(listStart)) {
+    const diocese = line.match(/^-\s+(.+)/);
+    const chapter = line.match(/^\s+-\s+(.+)/);
+    if (diocese) chapterGroups.push({ diocese: diocese[1], chapters: [] });
+    else if (chapter && chapterGroups.length)
+      chapterGroups.at(-1)!.chapters.push(chapter[1]);
+  }
+}
 ---
 
 <section
@@ -14,12 +45,26 @@ const { settings } = Astro.props;
 >
   <div>
     <h2 id="about-title">About</h2>
-    <p class="lead">{settings.about}</p>
-    <p>{settings.history}</p>
-    {settings.introductionVi && <p lang="vi">{settings.introductionVi}</p>}
-    <a class="text-link" href={settings.veymUrl}>
-      Get to know VEYM Canada <span aria-hidden="true">↗</span>
-    </a>
+    <div class="about-copy">
+      {prose.map((paragraph, index) => (
+        <p class:list={[{ lead: index === 0 }]}>
+          {paragraph}
+        </p>
+      ))}
+      {chapterGroups.length > 0 && (
+        <ul class="diocese-list" aria-label="Chapters by diocese">
+          {chapterGroups.map(({ diocese, chapters }) => (
+            <li>
+              {diocese}
+              <ul>
+                {chapters.map((chapter) => <li>{chapter}</li>)}
+              </ul>
+            </li>
+          ))}
+        </ul>
+      )}
+      {settings.introductionVi && <p lang="vi">{settings.introductionVi}</p>}
+    </div>
   </div>
   <aside class="patron">
     {settings.patronImage && (
@@ -33,7 +78,19 @@ const { settings } = Astro.props;
     )}
     <div>
       <h3>St. Kateri Tekakwitha</h3>
-      <p>{settings.patronText}</p>
+      <div class="patron-copy">
+        {patronParagraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+      {patronFacts.length > 0 && (
+        <dl class="patron-facts">
+          {patronFacts.map(({ label, value }) => (
+            <div>
+              <dt>{label}</dt>
+              <dd>{value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
       <p class="patron-prayer">Saint Kateri, pray for us.</p>
     </div>
   </aside>

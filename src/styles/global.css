@@ -322,9 +322,9 @@ main:focus {
 }
 .about-grid {
   display: grid;
-  grid-template-columns: 1.45fr 1fr;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
   gap: 90px;
-  align-items: center;
+  align-items: start;
 }
 .about-grid h2 {
   margin: 0 0 24px;
@@ -332,8 +332,29 @@ main:focus {
 .about-grid p:not(.eyebrow) {
   color: var(--muted);
 }
-.about-grid .text-link {
-  margin-top: 20px;
+.about-copy p {
+  line-height: 1.75;
+  margin: 0 0 1.5rem;
+}
+.diocese-list {
+  color: var(--muted);
+  line-height: 1.7;
+  padding-left: 1.4rem;
+  margin: 0;
+}
+.diocese-list > li {
+  margin-bottom: 0.9rem;
+  font-weight: 650;
+  color: var(--primary);
+}
+.diocese-list ul {
+  padding-left: 1.4rem;
+  margin-top: 0.25rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+.diocese-list ul li {
+  margin: 0.15rem 0;
 }
 .patron {
   background: var(--surface);
@@ -355,9 +376,38 @@ main:focus {
 .patron p:not(.eyebrow) {
   font-size: 0.96rem;
 }
+.patron-copy {
+  text-align: left;
+}
+.patron-copy p {
+  line-height: 1.7;
+  margin: 0 0 1.2rem;
+}
+.patron-facts {
+  margin: 1.5rem 0;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.patron-facts > div {
+  display: grid;
+  grid-template-columns: 6.5rem minmax(0, 1fr);
+  gap: 0.6rem;
+  padding: 0.3rem 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+.patron-facts dt {
+  color: var(--primary);
+  font-weight: 700;
+}
+.patron-facts dd {
+  margin: 0;
+  color: var(--muted);
+}
 .patron .patron-prayer {
   font-family: var(--heading-font);
-  font-style: italic;
   color: var(--primary);
 }
 .section-heading {
@@ -1101,24 +1151,24 @@ main:focus {
     font-size: 1rem;
   }
   .patron {
-    display: flex;
-    align-items: center;
-    text-align: left;
-    gap: 22px;
+    display: block;
+    text-align: center;
     padding: 25px 20px;
   }
   .patron > img {
-    width: 85px;
-    height: 110px;
-    margin: 0;
-    flex-shrink: 0;
+    width: 100px;
+    height: 128px;
+    margin: 0 auto 20px;
   }
   .patron h3 {
     font-size: 1.17rem;
     margin: 8px 0 12px;
   }
   .patron p:not(.eyebrow) {
-    font-size: 0.82rem;
+    font-size: 0.95rem;
+  }
+  .patron-facts > div {
+    grid-template-columns: 5.8rem minmax(0, 1fr);
   }
   .section-heading {
     align-items: flex-start;

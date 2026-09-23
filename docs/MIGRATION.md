@@ -37,10 +37,10 @@ The archived Emmaus notice publication date is a migration reference derived fro
 
 | Local asset                                                  | Source                                                                                                        |
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
-| `src/assets/images/community.jpg`                            | `https://kateri.veym.ca/wp-content/uploads/2026/04/cropped-20171007_113751-1400x386-1.jpg`                    |
-| `src/assets/images/crest.png` and `public/icons/*.png` | Shield-only artwork derived from the user-provided `LD Kateri CoA (With maple leaf wreath).png`; wreath and motto excluded |
-| `src/assets/images/teresa-hai-dong/crest.png` | User-provided `Teresa Hai Dong - Scarborough.png`; bottom motto banner removed and exterior made transparent. |
-| `src/assets/images/patron.png`                               | `https://kateri.veym.ca/wp-content/uploads/2022/03/kateri-2c.png`                                             |
+| `src/assets/images/community.webp`                            | `https://kateri.veym.ca/wp-content/uploads/2026/04/cropped-20171007_113751-1400x386-1.jpg`                    |
+| `src/assets/images/crest.webp` and `public/icons/*.png` | Shield-only artwork derived from the user-provided `LD Kateri CoA (With maple leaf wreath).png`; wreath and motto excluded |
+| `src/assets/images/teresa-hai-dong/crest.webp` | User-provided `Teresa Hai Dong - Scarborough.png`; bottom motto banner removed and exterior made transparent. |
+| `src/assets/images/patron.webp`                               | `https://kateri.veym.ca/wp-content/uploads/2022/03/kateri-2c.png`                                             |
 | `public/uploads/forms/promise-and-promotion-application.pdf` | `https://veym.ca/veymasset/resources/forms/Don_xin_Thang_Cap_Viet_Anh_(v13)_fillable.pdf`                     |
 | `public/uploads/documents/hstt-promise-ceremony.docx`        | `https://kateri.veym.ca/wp-content/uploads/2025/09/NGHI-THUC-TUYEN-HUA-HSTT-GENERAL.docx`                     |
 

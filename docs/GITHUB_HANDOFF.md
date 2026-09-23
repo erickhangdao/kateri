@@ -2,7 +2,7 @@
 
 This folder is a complete source-code project. Place its **contents at the root of the GitHub repository**: `package.json` should be beside `README.md`, `src/`, and `public/`, not inside an extra nested `Kateri/` folder.
 
-The handoff removes installed dependencies, builds, research downloads, browser binaries, and temporary reports. Those generated files are unnecessary for GitHub. A new developer recreates what is needed with `npm ci` and `npm run build`.
+Version control excludes installed dependencies, builds, research downloads, browser binaries, and temporary reports. A local working folder may contain them after development; those generated files are unnecessary for GitHub. A new developer recreates what is needed with `npm ci` and `npm run build`.
 
 ## Before uploading
 

@@ -15,7 +15,7 @@ Completed build, browser, CMS, accessibility, and performance checks are recorde
 | Launch the live website                              | [Production setup](#production-github-setup), [deployment](#deployment), and [migration notes](docs/MIGRATION.md) |
 | Check asset sources and licenses                     | [Third-party notices](THIRD_PARTY_NOTICES.md)                                                                     |
 
-The source handoff contains no installed dependencies or generated build output. Everything needed to recreate them is included. Upload the contents of this folder at the repository root, including dotfiles; uploading to GitHub does not by itself deploy the website.
+Git-tracked source excludes installed dependencies and generated build output. A local development folder may still contain them; together they can be far larger than the repository. Everything needed to recreate them is included. Upload the contents of this folder at the repository root, including dotfiles; uploading to GitHub does not by itself deploy the website.
 
 ## Run locally
 
@@ -78,9 +78,9 @@ Map outlines are locally stored public-domain [Natural Earth province boundaries
 
 ### Change global content
 
-**Site settings** controls names, motto, introduction, About copy, history, official contact email, social links, affiliation, league logo and patron image, footer, leadership term, and search metadata. Editor notes are not rendered. Use these notes for content awaiting confirmation. Navigation and general interface labels live in the components.
+**Site settings** controls names, motto, introduction, About copy, history, official contact email, social links, affiliation, league logo and patron image, footer, leadership term, and search metadata. In the About and history fields, blank lines separate paragraphs, and lines beginning with a hyphen make the diocesan chapter list (indent chapters beneath each diocese by two spaces). In the patron biography field, blank lines separate paragraphs. Enter patron dates one per line as `Label: value` (for example, `Baptized: April 18, 1676`). Editor notes are not rendered. Use these notes for content awaiting confirmation. Navigation and general interface labels live in the components.
 
-Images are uploaded into `src/assets/images/` and rendered using Astro's image tools. Use JPG, PNG, WebP, or AVIF. The public visitor receives appropriately sized WebP images with explicit dimensions. Vietnamese and Latin font subsets are self-hosted; no Google Fonts request is made by visitors.
+Images are uploaded into `src/assets/images/` and rendered using Astro's image tools. Keep website images in WebP and resize unusually large source artwork before uploading it. The public visitor receives appropriately sized WebP images with explicit dimensions. The tiny PNG favicon and Apple touch icon remain PNG for icon compatibility. Vietnamese and Latin font subsets are self-hosted; no Google Fonts request is made by visitors.
 
 ## Production GitHub setup
 
