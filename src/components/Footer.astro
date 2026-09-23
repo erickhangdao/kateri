@@ -15,6 +15,7 @@ const { settings } = Astro.props;
     <div class="footer-links">
       <a href={settings.veymUrl}>VEYM Canada</a>
       {settings.facebook && <a href={settings.facebook}>Facebook</a>}
+      {settings.instagram && <a href={settings.instagram}>Instagram</a>}
       <a href={`mailto:${settings.contactEmail}`}>Email us</a>
     </div>
   </div>
