@@ -28,14 +28,13 @@ const current = announcements
   <About settings={settings} />
   <section
     id="announcements"
-    class="section announcements-section"
+    class="section home-section announcements-section"
     aria-labelledby="announcements-title"
   >
     <div class="container">
       <div class="section-heading">
         <div>
-          <p class="eyebrow">LIFE IN OUR LIÊN ĐOÀN</p>
-          <h2 id="announcements-title">News & gatherings</h2>
+          <h2 id="announcements-title">Announcements</h2>
         </div>
         <a class="text-link" href="/announcements/">
           All announcements <span aria-hidden="true">↗</span>
@@ -68,19 +67,12 @@ const current = announcements
   <Leadership leaders={leaders.sort(byOrder)} settings={settings} />
   <section
     id="resources"
-    class="section resources-section"
+    class="section home-section resources-section"
     aria-labelledby="resources-title"
   >
     <div class="container resources-grid">
       <div>
-        <p class="eyebrow" lang="vi">
-          TÀI LIỆU & BIỂU MẪU
-        </p>
-        <h2 id="resources-title">
-          Prepared
-          <br />
-          to serve.
-        </h2>
+        <h2 id="resources-title">Resources</h2>
         <p>
           Forms, formation materials, and guidance for our chapters and youth
           leaders.
@@ -102,14 +94,14 @@ const current = announcements
   </section>
   <section
     id="contact"
-    class="section container contact-section"
+    class="section home-section container contact-section"
     aria-labelledby="contact-title"
   >
-    <p class="eyebrow">LET’S WALK TOGETHER</p>
-    <h2 id="contact-title">There’s a place for you here.</h2>
+    <h2 id="contact-title">Contact</h2>
     <p class="lead">{settings.contactText}</p>
     <a class="contact-email" href={`mailto:${settings.contactEmail}`}>
-      {settings.contactEmail} <span aria-hidden="true">↗</span>
+      <span class="contact-email-address">{settings.contactEmail}</span>
+      <span aria-hidden="true">↗</span>
     </a>
     <div class="contact-links">
       <span>{settings.region}</span>

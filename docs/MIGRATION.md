@@ -20,6 +20,8 @@ Source reviewed on September 21–22, 2026: [Kateri](https://kateri.veym.ca/), i
 | Official email, Facebook, VEYM Canada                   | Editable contact / affiliation settings                                                   |
 | Historic community Mass photograph, patron image | Reused existing Kateri assets; local copies and optimized rendering                       |
 
+The league chaplain card uses the name and role published in the official [May 2026 Emmaus II lesson notice](https://kateri.veym.ca/emmaus01/2026/05/18/online-lessons/). The current About page lists only the five elected committee members; confirm the chaplain appointment for the 2026–2029 term before launch.
+
 The archived Emmaus notice publication date is a migration reference derived from the poster media record (February 5, 2026; WordPress media ID 57130), not a newly announced event. Its source/event information is retained in editor notes.
 
 ## Content requiring leadership confirmation
@@ -37,6 +39,7 @@ The archived Emmaus notice publication date is a migration reference derived fro
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- |
 | `src/assets/images/community.jpg`                            | `https://kateri.veym.ca/wp-content/uploads/2026/04/cropped-20171007_113751-1400x386-1.jpg`                    |
 | `src/assets/images/crest.png` and `public/icons/*.png` | Shield-only artwork derived from the user-provided `LD Kateri CoA (With maple leaf wreath).png`; wreath and motto excluded |
+| `src/assets/images/teresa-hai-dong/crest.png` | User-provided `Teresa Hai Dong - Scarborough.png`; bottom motto banner removed and exterior made transparent. |
 | `src/assets/images/patron.png`                               | `https://kateri.veym.ca/wp-content/uploads/2022/03/kateri-2c.png`                                             |
 | `public/uploads/forms/promise-and-promotion-application.pdf` | `https://veym.ca/veymasset/resources/forms/Don_xin_Thang_Cap_Viet_Anh_(v13)_fillable.pdf`                     |
 | `public/uploads/documents/hstt-promise-ceremony.docx`        | `https://kateri.veym.ca/wp-content/uploads/2025/09/NGHI-THUC-TUYEN-HUA-HSTT-GENERAL.docx`                     |

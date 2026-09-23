@@ -5,9 +5,10 @@
   "province": "Ontario",
   "parish": "St. Jane Frances Church",
   "social": "https://www.facebook.com/emmanuel.tntt.1",
-  "imageAlt": "",
+  "imageAlt": "Đoàn Emmanuel crest",
   "order": 4,
   "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified.",
   "latitude": 43.77,
-  "longitude": -79.411
+  "longitude": -79.411,
+  "image": "/src/assets/images/emmanuel/crest.png"
 }

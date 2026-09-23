@@ -7,53 +7,66 @@ interface Props {
   settings: Settings;
 }
 const { leaders, settings } = Astro.props;
+const roleTiers = [
+  ["League Chaplain"],
+  ["President"],
+  ["Vice President, Administration", "Vice President, Formation"],
+  ["Treasurer", "Secretary"],
+];
+const listedRoles = new Set(roleTiers.flat());
+const tiers = roleTiers
+  .map((roles) =>
+    roles.flatMap((role) => {
+      const leader = leaders.find((entry) => entry.data.role === role);
+      return leader ? [leader] : [];
+    }),
+  )
+  .filter((tier) => tier.length > 0);
+const others = leaders.filter((entry) => !listedRoles.has(entry.data.role));
+if (others.length) tiers.push(others);
 ---
 
 <section
   id="leadership"
-  class="section container"
+  class="section home-section container leadership-section"
   aria-labelledby="leadership-title"
 >
   <div class="section-heading">
     <div>
-      <p class="eyebrow">
-        A SPIRIT OF SERVICE <span>/ {settings.leadershipTerm}</span>
-      </p>
-      <h2 id="leadership-title" lang="vi">
-        Ban Thường Vụ
-      </h2>
-      <p class="lead">{settings.leadershipIntro}</p>
+      <h2 id="leadership-title">Leadership</h2>
+      <p class="lead">{settings.leadershipTerm} · {settings.leadershipIntro}</p>
     </div>
-    <span class="section-note">Liên Đoàn leadership</span>
   </div>
-  <div class="leader-grid">
-    {leaders.map(({ data }) => (
-      <article class="leader">
-        {data.image && (
-          <Image
-            class="leader-photo"
-            src={managedImage(data.image)}
-            alt={data.imageAlt || data.name}
-            width={240}
-            height={240}
-            loading="lazy"
-            format="webp"
-          />
-        )}
-        <p class="leader-role" lang="vi">
-          {data.roleVi || data.role}
-        </p>
-        <p class="leader-role-en">{data.role}</p>
-        <h3 lang="vi">
-          <span>{data.prefix}</span> {data.name}
-        </h3>
-        {data.biography && <p>{data.biography}</p>}
-        {data.email && (
-          <a class="text-link" href={`mailto:${data.email}`}>
-            Email {data.name.split(" ").at(-1)} ↗
-          </a>
-        )}
-      </article>
+  <div class="leader-chart">
+    {tiers.map((tier) => (
+      <div class:list={["leader-tier", { "leader-tier-single": tier.length === 1, "leader-tier-pair": tier.length === 2 }]}>
+        {tier.map(({ data }) => (
+          <article class="leader">
+            {data.image && (
+              <Image
+                class="leader-photo"
+                src={managedImage(data.image)}
+                alt={data.imageAlt || data.name}
+                width={240}
+                height={240}
+                loading="lazy"
+                format="webp"
+              />
+            )}
+            <p class="leader-role" lang="vi">{data.roleVi || data.role}</p>
+            {data.roleVi && <p class="leader-role-en">{data.role}</p>}
+            <h3 lang="vi">
+              <span>{data.prefix}</span> {data.name}
+            </h3>
+            {data.biography && <p>{data.biography}</p>}
+            {data.email && (
+              <a class="text-link" href={`mailto:${data.email}`}>
+                Email {data.name.split(" ").at(-1)} ↗
+              </a>
+            )}
+          </article>
+        ))}
+      </div>
     ))}
   </div>
 </section>

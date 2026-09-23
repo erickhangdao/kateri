@@ -5,9 +5,10 @@
   "province": "Ontario",
   "parish": "Our Lady of Viet Nam Parish",
   "social": "https://www.facebook.com/TNTTPhanxicoXavieCanHamilton",
-  "imageAlt": "",
+  "imageAlt": "Đoàn Phanxicô Xaviê Cần crest",
   "order": 5,
   "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified.",
   "latitude": 43.255,
-  "longitude": -79.872
+  "longitude": -79.872,
+  "image": "/src/assets/images/phanxico-xavie-can/crest.png"
 }

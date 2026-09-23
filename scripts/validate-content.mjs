@@ -42,7 +42,6 @@ function validate(value, path = "") {
         "englishPdf",
         "vietnamesePdf",
         "image",
-        "heroImage",
         "patronImage",
         "logo",
         "ogImage",

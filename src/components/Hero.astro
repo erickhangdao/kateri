@@ -7,11 +7,18 @@ interface Props {
 const { settings } = Astro.props;
 ---
 
-<section class="hero" aria-labelledby="hero-title">
+<section id="home" class="hero" aria-labelledby="hero-title">
   <div class="container hero-intro">
-    <p class="eyebrow">
-      VEYM CANADA <span aria-hidden="true">/</span> ONTARIO
-    </p>
+    <Image
+      class="hero-crest"
+      src={managedImage(settings.logo)}
+      alt="Kateri Tekakwitha league shield"
+      width={240}
+      height={240}
+      format="webp"
+      loading="eager"
+      fetchpriority="high"
+    />
     <h1 id="hero-title">
       <span lang="vi">Liên Đoàn</span>
       <br />
@@ -28,19 +35,6 @@ const { settings } = Astro.props;
       </a>
     </div>
   </div>
-  <figure class="hero-photo container-wide">
-    <Image
-      src={managedImage(settings.heroImage)}
-      alt={settings.heroAlt}
-      widths={[480, 768, 1024, 1400]}
-      sizes="(max-width: 1400px) 100vw, 1400px"
-      width={1400}
-      format="webp"
-      loading="eager"
-      fetchpriority="high"
-    />
-    <figcaption>{settings.heroCaption}</figcaption>
-  </figure>
   <div class="motto-strip">
     <div class="container">
       <span class="motto-latin" lang="la">

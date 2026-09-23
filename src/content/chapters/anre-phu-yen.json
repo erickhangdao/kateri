@@ -5,9 +5,10 @@
   "province": "Ontario",
   "parish": "The Martyrs of Viet Nam Mission",
   "social": "https://www.facebook.com/TNTTAnrePhuYen",
-  "imageAlt": "",
+  "imageAlt": "Đoàn Anrê Phú Yên crest",
   "order": 3,
   "notes": "Verified against kateri.veym.ca/about/ on 2026-09-21. Parish community link used where no separate chapter site is verified.",
   "latitude": 43.451,
-  "longitude": -80.493
+  "longitude": -80.493,
+  "image": "/src/assets/images/anre-phu-yen/crest.png"
 }

@@ -9,14 +9,11 @@ const { settings } = Astro.props;
 
 <section
   id="about"
-  class="section container about-grid"
+  class="section home-section container about-grid"
   aria-labelledby="about-title"
 >
   <div>
-    <p class="eyebrow">
-      OUR CALLING <span lang="vi">/ VỀ CHÚNG TÔI</span>
-    </p>
-    <h2 id="about-title">{settings.aboutHeading}</h2>
+    <h2 id="about-title">About</h2>
     <p class="lead">{settings.about}</p>
     <p>{settings.history}</p>
     {settings.introductionVi && <p lang="vi">{settings.introductionVi}</p>}
@@ -35,7 +32,6 @@ const { settings } = Astro.props;
       />
     )}
     <div>
-      <p class="eyebrow">OUR PATRON SAINT</p>
       <h3>St. Kateri Tekakwitha</h3>
       <p>{settings.patronText}</p>
       <p class="patron-prayer">Saint Kateri, pray for us.</p>

@@ -1,26 +1,24 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { Image } from "astro:assets";
-import { managedImage } from "../lib/content";
 import ChapterMap from "./ChapterMap.astro";
 interface Props {
   chapters: CollectionEntry<"chapters">[];
 }
 const { chapters } = Astro.props;
+const listChapters = [...chapters].sort((a, b) =>
+  new Intl.Collator("vi", { sensitivity: "base" }).compare(a.data.name, b.data.name),
+);
 ---
 
 <section
   id="chapters"
-  class="section chapters-section"
+  class="section home-section chapters-section"
   aria-labelledby="chapters-title"
 >
   <div class="container">
     <div class="section-heading">
       <div>
-        <p class="eyebrow">ROOTED IN OUR COMMUNITIES</p>
-        <h2 id="chapters-title">
-          Our chapters <span lang="vi">/ Các Đoàn</span>
-        </h2>
+        <h2 id="chapters-title">Chapters</h2>
       </div>
       <p>
         Find your community.
@@ -51,34 +49,22 @@ const { chapters } = Astro.props;
     </div>
     <ChapterMap chapters={chapters} />
     <div class="chapter-grid" id="chapter-list">
-      {chapters.map(({ id, data }, index) => (
+      {listChapters.map(({ id, data }, index) => (
         <article class="chapter" id={`chapter-${id}`}>
           <div class="chapter-top">
             <span class="chapter-number" aria-hidden="true">
               {String(index + 1).padStart(2, "0")}
             </span>
-            <span class="eyebrow">{data.city}</span>
-            {data.image && (
-              <Image
-                src={managedImage(data.image)}
-                alt={data.imageAlt}
-                width={52}
-                height={52}
-                loading="lazy"
-              />
-            )}
+            <span class="chapter-city">{data.city}</span>
           </div>
-          <h3 lang="vi">{data.name}</h3>
+          <h3 lang="vi">
+            {data.website || data.social ? (
+              <a href={data.website || data.social}>
+                {data.name} <span aria-hidden="true">↗</span>
+              </a>
+            ) : data.name}
+          </h3>
           {data.parish && <p>{data.parish}</p>}
-          {(data.website || data.social) && (
-            <a
-              class="text-link"
-              href={data.website || data.social}
-              aria-label={`Connect with ${data.name}, ${data.city}`}
-            >
-              Connect with this chapter <span aria-hidden="true">↗</span>
-            </a>
-          )}
         </article>
       ))}
     </div>

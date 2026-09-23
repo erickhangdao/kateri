@@ -100,7 +100,7 @@ In local mode, the editor writes to your working folder. Review those changed fi
 2. Saving a chapter updates a file such as `src/content/chapters/ane-thanh.json`. Its filename is the entry ID.
 3. The `chapters` collection in `src/content.config.ts` loads that file and checks the field types.
 4. `src/pages/index.astro` calls `getCollection("chapters")`, sorts entries with `byOrder`, and passes them to `Chapters.astro`.
-5. `Chapters.astro` renders the list and passes the same entries to `ChapterMap.astro`. Neither component has a separate copy of the chapter name or parish.
+5. `Chapters.astro` sorts the list alphabetically by đoàn name and numbers it in that order. It passes the original entries to `ChapterMap.astro`, where Display order controls the map and Previous/Next sequence. Neither component has a separate copy of the chapter name or parish.
 6. The map's browser script changes which already-rendered detail panel is visible. It does not fetch data from GitHub or an external map service.
 
 ## 5. Reading an Astro file
@@ -141,7 +141,7 @@ A normal `<script>` block contains browser behavior and can use `document`, even
 | Announcement detail layout                         | `src/pages/announcements/[slug].astro`                                  |
 | Chapter list and Map/List buttons                  | `src/components/Chapters.astro`                                         |
 | Map markers, details, and interaction              | `src/components/ChapterMap.astro`                                       |
-| Leadership section                                 | `src/components/Leadership.astro`                                       |
+| Leadership hierarchy                               | `src/components/Leadership.astro` and `src/content/leadership/`           |
 | Resource rows and filtering                        | `ResourceRow.astro` and `src/pages/resources/index.astro`               |
 | Contact section                                    | `src/pages/index.astro`; editable text comes from Site settings         |
 | Footer                                             | `src/components/Footer.astro`                                           |
@@ -149,6 +149,10 @@ A normal `<script>` block contains browser behavior and can use `document`, even
 | Date, expiry, and registration rules               | `src/lib/announcements.mjs` and `tests/announcements.test.mjs`          |
 | Search/social metadata                             | `src/components/SEO.astro`, page props, and Site settings               |
 | An old URL's replacement                           | `src/data/redirects.json`                                               |
+
+The homepage hero uses the logo chosen in Site settings, and its layout lives in `src/components/Hero.astro`. Every homepage section has the `home-section` class. The rule in `src/styles/global.css` gives each section at least one visible screen of height below the sticky header; long content is allowed to make a section taller. If you add a homepage section, include that class and an `id` matching its header link.
+
+The leadership chart groups entries by the exact English `role` values in `src/components/Leadership.astro`: League Chaplain, President, the two Vice President roles, Treasurer, and Secretary. Keep those values when editing names. New roles display after the established tiers until you add them to `roleTiers`.
 
 ## 7. Changing content fields safely
 
@@ -188,9 +192,9 @@ The mobile menu, resource filter, and map use progressive enhancement: HTML rema
 
 `src/data/ontario-map.json` contains local SVG path strings and geographic bounds. It includes an Ontario overview and a larger southern Ontario view because the seven communities are concentrated there. Coordinates are approximate community centres, not verified meeting addresses.
 
-`ChapterMap.astro` converts longitude/latitude into positions on an 800 × 600 drawing. Its `callouts` object places numbered buttons away from crowded geographic dots; connecting lines preserve the actual location. Keys match chapter entry filenames without `.json`. X increases to the right and Y increases downward. For example, `[400, 300]` is the centre of the drawing.
+`ChapterMap.astro` converts longitude/latitude into positions on an 800 × 600 drawing. The crest buttons sit directly on the chapter coordinates; there are no separate callout positions or connector lines. X increases to the right and Y increases downward. For example, `[400, 300]` is the centre of the drawing.
 
-To add a chapter, create its content, coordinates, and display order in Keystatic. Entries inside the displayed geographic bounds appear on the map; absent or out-of-bounds coordinates remain in List view. New entries default to placing the button on the geographic point. Add a `callouts` position only if a label overlaps another control, and check mobile as well as desktop. Keep markers at least 44 pixels across and avoid overlapping their touch areas.
+To add a chapter, create its content, coordinates, display order, and crest in Keystatic. If no verified crest is available, the map shows the Kateri league crest as a temporary fallback; the list never shows crests. Entries inside the displayed geographic bounds appear on the map; absent or out-of-bounds coordinates remain in List view. Each button is placed at its geographic point. Check the layout on mobile and desktop, especially around Toronto where nearby crests may crowd each other. The transparent buttons keep a 44-pixel touch area; Previous/Next and keyboard controls also reach every chapter.
 
 Hover, focus, and tap share `selectChapter()`. The selected marker uses `aria-pressed`; its detail panel is announced with `aria-live`. Arrow keys, Home, and End move between markers. Previous/Next buttons provide another way to browse. Links to `#chapter-<entry-id>` automatically reveal the list so existing direct links remain usable.
 
@@ -200,7 +204,7 @@ You normally do not need to regenerate the outline. If the map area must change,
 node scripts/generate-map.mjs /path/to/ne_50m_admin_1_states_provinces_lakes.geojson
 ```
 
-This updates only `src/data/ontario-map.json`. Adjust the script's bounds and the component's labels, callouts, and overview rectangle together if the displayed area changes. Commit the small generated JSON; do not commit the large downloaded source dataset. Keep the attribution in the UI and [third-party notices](../THIRD_PARTY_NOTICES.md).
+This updates only `src/data/ontario-map.json`. Adjust the script's bounds and the component's labels, coordinate placement, and overview rectangle together if the displayed area changes. Commit the small generated JSON; do not commit the large downloaded source dataset. Keep the attribution in the UI and [third-party notices](../THIRD_PARTY_NOTICES.md).
 
 ## 9. Images, documents, and links
 
